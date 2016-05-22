@@ -37,6 +37,7 @@ public class Constant {
 
 
     public final static String MYODER ="https://dev.api.kalendria.com/api/v1/booking?limit=10&populate=business&skip=0&where={%22customer%22:17,%22scheduledAt%22:{%22%3E%22:%222016-05-06T15:31:12+05:30%22}}";
+    public final static String MYODER_PAST ="https://dev.api.kalendria.com/api/v1/booking?limit=10&populate=business&skip=0&where={\"customer\":17,\"scheduledAt\":{\"<=\":\"2016-05-06T15:31:12+05:30\"}}";
 
 
     public static String getUserId(final Context context)

@@ -2,6 +2,7 @@ package com.kalendria.kalendria.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -45,6 +46,7 @@ public class MyOrdersFragment extends Fragment {
     private List<MyorderModel> cafeList;
     public static String Tag = MyOrdersFragment.class.getSimpleName();
     MyOderAdapter adapter1;
+    TextView current_txt,previous_txt;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,19 +60,62 @@ public class MyOrdersFragment extends Fragment {
         pDialog.setMessage("Please wait...");
         pDialog.setCancelable(false);
         list=(ListView)rootView.findViewById(R.id.myorder);
+        current_txt=(TextView)rootView.findViewById(R.id.current_txt);
+        previous_txt=(TextView)rootView.findViewById(R.id.previous_txt);
+        onclickButton();
 
-      if(KalendriaAppController.isNetworkConnected(getActivity())){
-          MakeJsonArrayReq();
-      }else{
-          Toast.makeText(getActivity(), "Please check your internet", Toast.LENGTH_SHORT).show();
-      }
+        if(KalendriaAppController.isNetworkConnected(getActivity())){
+            String url= Constant.MYODER;
+            MakeJsonArrayReq(url);
+        }else{
+            Toast.makeText(getActivity(), "Please check your internet", Toast.LENGTH_SHORT).show();
+        }
         return rootView;
     }
 
-    private void MakeJsonArrayReq() {
+    public void onclickButton(){
+        current_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                current_txt.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                current_txt.setTextColor(Color.parseColor("#000000"));
+
+                previous_txt.setBackgroundColor(Color.parseColor("#000000"));
+                previous_txt.setTextColor(Color.parseColor("#FFFFFF"));
+
+                if(KalendriaAppController.isNetworkConnected(getActivity())){
+                    String url= Constant.MYODER;
+                    MakeJsonArrayReq(url);
+                }else{
+                    Toast.makeText(getActivity(), "Please check your internet", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        previous_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                previous_txt.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                previous_txt.setTextColor(Color.parseColor("#000000"));
+
+                current_txt.setBackgroundColor(Color.parseColor("#000000"));
+                current_txt.setTextColor(Color.parseColor("#FFFFFF"));
+                if(KalendriaAppController.isNetworkConnected(getActivity())){
+                    String url= Constant.MYODER_PAST;
+                    MakeJsonArrayReq(url);
+                }else{
+                    Toast.makeText(getActivity(), "Please check your internet", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void MakeJsonArrayReq(String url) {
         showpDialog();
         cafeList=new ArrayList<>();
-        String url= Constant.MYODER;
+
         System.out.println("MYODER-->"+url);
         JsonArrayRequest jreq = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
 
