@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:background="#0097db">
+
+        <TextView
+
+            android:id="@+id/subcatagory_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="Arial"
+            android:lines="1"
+            android:padding="5dp"
+            android:text="My Cart"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:typeface="serif" />
+
+
+    </FrameLayout>
+
+    <ListView
+        android:id="@+id/subcatagory_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
+</LinearLayout>

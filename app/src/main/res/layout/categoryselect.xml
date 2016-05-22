@@ -1,0 +1,132 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:background="#0097db"
+        android:paddingLeft="5dp">
+
+        <Button
+            android:id="@+id/btnnotification"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/back_icon" />
+
+
+        <TextView
+            android:id="@+id/selected_category"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/btnnotification"
+            android:gravity="left|center"
+            android:text="Category selected"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/rightmenu"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="#0079b0"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/filter_btn"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:background="@drawable/filter_icon"></Button>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white" />
+
+            <Button
+                android:id="@+id/btnsettings"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:background="@drawable/sort_icon" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/searchlayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_below="@+id/header">
+
+        <RelativeLayout
+            android:id="@+id/Search_Relative"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/btnmenu">
+
+
+            <TextView
+                android:id="@+id/editsearchhotel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="30dp"
+                android:paddingRight="35dp"
+                android:text="Your currrent location"
+                android:textColor="@android:color/black"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/selected_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editsearchhotel"
+                android:paddingLeft="30dp"
+                android:paddingRight="35dp"
+                android:text="dubai"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/_15sdp" />
+
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/btnmenu"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:paddingRight="5dp"
+            android:text="change"
+            android:textColor="#0097db" />
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/venulist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/searchlayout"
+        android:scrollbars="none" />
+
+
+</RelativeLayout>

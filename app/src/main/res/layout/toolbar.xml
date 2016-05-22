@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_26sdp"
+        android:layout_gravity="left|center"
+        android:layout_marginBottom="2dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/white"
+        android:foregroundGravity="left"
+        android:scaleType="centerCrop"
+        android:src="@drawable/logo" />
+
+    <include
+        android:id="@+id/cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        layout="@layout/cart" />
+
+</android.support.v7.widget.Toolbar>
+
+    <!-- android:minHeight="?attr/actionBarSize"
+     local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+ -->
+
