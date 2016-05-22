@@ -98,7 +98,7 @@ public class DashBoardFragment extends Fragment {
         categorySingletone = DeshBoardTypeSingleton.getInstance().getParamList();/*get only categories datas which is used to categories page for next and pres button on click */
         addToCardSingletone = AddToCardSingleTone.getInstance().getParamList();/*This line is used add to card venue name and servie list */
         categorySingletone.clear();
-        responceReseultFromServerSingletone.clear();
+        //responceReseultFromServerSingletone.clear();
         // addToCardSingletone.clear();
     }
 
@@ -129,7 +129,10 @@ public class DashBoardFragment extends Fragment {
         list.addFooterView(footerView);
 
         try {
-            makeJsonObjectRequest();
+            if(responceReseultFromServerSingletone.size()==0){
+                makeJsonObjectRequest();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
