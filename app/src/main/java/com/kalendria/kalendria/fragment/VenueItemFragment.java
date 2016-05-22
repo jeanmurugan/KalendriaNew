@@ -126,7 +126,7 @@ public class VenueItemFragment extends Fragment {
     private boolean favoriate=true;
 
     private ListView reate_us;
-    private List<ReviewModel>cafeList;
+    private List<ReviewModel> cafeList=new ArrayList<ReviewModel>();;
     ReviewAdapter reviewAdapter;
     Button review_rateus_btn,register_back_btn;
 
@@ -737,27 +737,6 @@ public class VenueItemFragment extends Fragment {
                             }
                         });
 
-                       /* ArrayList<String> strings=new ArrayList<>();
-                        strings.add("FRIDAY -09-10.00");
-                        strings.add("MONDAY -09-10.00");
-                        strings.add("TUESDAY -09-10.00");
-                        strings.add("WEDNESDAY  -09-10.00");
-                        strings.add("THURSDAY -09-10.00");
-                        strings.add("SATURDAY -09-10.00");
-                        strings.add("SUNDAY -09-10.00");
-
-                        int fri_index=strings.indexOf("FRIDAY -09-10.00");
-                        int sat_index=strings.indexOf("SATURDAY -09-10.00");
-                        int sun_index=strings.indexOf("SUNDAY -09-10.00");
-
-                        System.out.println("FRIDAY index " + fri_index);
-                        System.out.println("SATURDAY index " + sat_index);
-                        System.out.println("SUNDAY index " + sun_index);
-                        strings.set(fri_index, "SUNDAY -09-10.00");
-                        strings.set(sat_index, "FRIDAY -09-10.00");
-                        strings.set(sun_index, "SATURDAY -09-10.00" );
-
-                        System.out.println("Result :" + strings);*/
 
                         System.out.println("custum_list -->" + custum_list.size());
                         selectedVenuAdapter = new VenueItemAdapter(custum_list, getActivity());
@@ -820,98 +799,104 @@ public class VenueItemFragment extends Fragment {
 
         venue_ll.setVisibility(View.GONE);
         service_ll.setVisibility(View.VISIBLE);
-        showpDialog();
-        String venueID = Constant.getVenueId(getActivity());
-        String url =Constant.HOST+"api/v1/service?business="+venueID;
-        System.out.println("service-->" + url);
 
-        StringRequest jsonObjReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        if(list.size()==0) {
 
-                try {
+            showpDialog();
+            String venueID = Constant.getVenueId(getActivity());
+            String url =Constant.HOST+"api/v1/service?business="+venueID;
+            System.out.println("service-->" + url);
 
-                    list.clear();
-                    String s = mjsonResonceSingletone.get(0);
-                    if (s != null) {
+            StringRequest jsonObjReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
 
-                        JSONObject jsonObject_category = new JSONObject(s);
-                        JSONArray jsonArray_category = jsonObject_category.getJSONArray("categorys");
-                        list = new ArrayList<VeneuItemServiceHeader>();
-                        for (int j = 0; j < jsonArray_category.length(); j++) {
+                    try {
 
-                            JSONObject jsonObject = jsonArray_category.getJSONObject(j);
-                            String type = jsonObject.getString("id");
-                            String name = jsonObject.getString("name");
-                            VeneuItemServiceHeader gru = new VeneuItemServiceHeader();
-                            gru.setName(jsonObject.getString("name"));
-                            //System.out.println("Header name-->"+jsonObject.getString("name"));
+                        list.clear();
+                        String s = mjsonResonceSingletone.get(0);
+                        if (s != null) {
 
-                            ch_list = new ArrayList<VenueItemServiceChild>();
+                            JSONObject jsonObject_category = new JSONObject(s);
+                            JSONArray jsonArray_category = jsonObject_category.getJSONArray("categorys");
+                            list = new ArrayList<VeneuItemServiceHeader>();
+                            for (int j = 0; j < jsonArray_category.length(); j++) {
 
-                            JSONArray jsonArray = new JSONArray(response);
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject obj = jsonArray.getJSONObject(i);
-                                if (type.equalsIgnoreCase(obj.getString("category")))/*in this line categorry is child's id*/ {
-                                    VenueItemServiceChild ch = new VenueItemServiceChild();
-                                    //ch.setId(obj.getString("id"));
-                                    ch.setId(obj.getString("category_service"));
-                                    ch.setName(obj.getString("name"));
-                                    ch.setDuration(obj.getString("duration"));
-                                    ch.setDiscount(obj.getString("discount"));
-                                    ch.setPrice(obj.getString("price"));
+                                JSONObject jsonObject = jsonArray_category.getJSONObject(j);
+                                String type = jsonObject.getString("id");
+                                String name = jsonObject.getString("name");
+                                VeneuItemServiceHeader gru = new VeneuItemServiceHeader();
+                                gru.setName(jsonObject.getString("name"));
+                                //System.out.println("Header name-->"+jsonObject.getString("name"));
 
-                                    // set venue detail with every child vealus
+                                ch_list = new ArrayList<VenueItemServiceChild>();
 
-                                    ch.setVenueid(obj.getString("business"));
-                                    ch.setVenuename(obj.getString("business_name"));
-                                    ch.setVenueImage(Constant.getVenuSelecedImageUrl(getActivity()));
-                                    ch.setVenuecity(city_name.getText().toString());
-                                    ch.setVeneregiion(relign_name.getText().toString());
-                                    ch_list.add(ch);
+                                JSONArray jsonArray = new JSONArray(response);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    if (type.equalsIgnoreCase(obj.getString("category")))/*in this line categorry is child's id*/ {
+                                        VenueItemServiceChild ch = new VenueItemServiceChild();
+                                        //ch.setId(obj.getString("id"));
+                                        ch.setId(obj.getString("category_service"));
+                                        ch.setName(obj.getString("name"));
+                                        ch.setDuration(obj.getString("duration"));
+                                        ch.setDiscount(obj.getString("discount"));
+                                        ch.setPrice(obj.getString("price"));
+
+                                        // set venue detail with every child vealus
+
+                                        ch.setVenueid(obj.getString("business"));
+                                        ch.setVenuename(obj.getString("business_name"));
+                                        ch.setVenueImage(Constant.getVenuSelecedImageUrl(getActivity()));
+                                        ch.setVenuecity(city_name.getText().toString());
+                                        ch.setVeneregiion(relign_name.getText().toString());
+                                        ch_list.add(ch);
+
+                                    }
 
                                 }
+                                gru.setItems(ch_list);
+                                if (ch_list.size() > 0)
+                                    list.add(gru);
+
 
                             }
-                            gru.setItems(ch_list);
-                            if (ch_list.size() > 0)
-                                list.add(gru);
-
-
+                            hidepDialog();
+                            ExpListItems = list;
+                            listAdapter = new VeneuItemsServiceAdapter(getActivity(), ExpListItems);
+                            expListView.setAdapter(listAdapter);
                         }
-                        ExpListItems = list;
-                        listAdapter = new VeneuItemsServiceAdapter(getActivity(), ExpListItems);
-                        expListView.setAdapter(listAdapter);
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
 
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-                hidepDialog();
-            }
-        }, new Response.ErrorListener() {
+            }, new Response.ErrorListener() {
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                hidepDialog();
-                VolleyLog.d(TAG, "Error : " + error.getMessage());
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    hidepDialog();
+                    VolleyLog.d(TAG, "Error : " + error.getMessage());
 
-            }
-        }) {
+                }
+            }) {
 
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("content-type", "application/json");
-                return params;
-            }
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("content-type", "application/json");
+                    return params;
+                }
 
-        };
+            };
 
-        //queue.add(jsonObjReq);
-        KalendriaAppController.getInstance().addToRequestQueue(jsonObjReq);
+            //queue.add(jsonObjReq);
+            KalendriaAppController.getInstance().addToRequestQueue(jsonObjReq);
+        }
+
 
     }
 
@@ -930,8 +915,10 @@ public class VenueItemFragment extends Fragment {
     }
 
     private void getfavorite() {
+
+
         String venueId=Constant.getVenueId(getActivity());
-       final  String userID=Constant.getUserId(getActivity());
+        final  String userID=Constant.getUserId(getActivity());
         String url=Constant.HOST+"api/v1/like?business="+venueId;
         StringRequest jsonObjReq = new StringRequest(Request.Method.GET,url,new Response.Listener<String>() {
             @Override
@@ -1071,63 +1058,68 @@ public class VenueItemFragment extends Fragment {
 
 
     private void getReview() {
-        showpDialog();
-        cafeList=new ArrayList<ReviewModel>();
-        String venueId=Constant.getVenueId(getActivity());
-        String url=Constant.REVIEW+"business="+venueId+"&limit=10&populate=user,ratings,replyBy&profanity=0&skip=0";
-        System.out.println("REVIEW-->"+url);
-        JsonArrayRequest jreq = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
 
-            @Override
-            public void onResponse(JSONArray response) {
-                Log.d(TAG, response.toString());
-                hidepDialog();
 
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        JSONObject object = response.getJSONObject(i);
-                        ReviewModel favorateModel=new ReviewModel();
-                        favorateModel.setReviewCommants(object.getString("message"));
-                        favorateModel.setReviewRatting(object.getString("overall"));
 
-                        String media=object.getString("reply");
+        if(cafeList.size()==0){
+            showpDialog();
+            String venueId=Constant.getVenueId(getActivity());
+            String url=Constant.REVIEW+"business="+venueId+"&limit=10&populate=user,ratings,replyBy&profanity=0&skip=0";
+            System.out.println("REVIEW-->"+url);
+            JsonArrayRequest jreq = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
 
-                        JSONObject jo=object.getJSONObject("user");
+                @Override
+                public void onResponse(JSONArray response) {
+                    Log.d(TAG, response.toString());
+                    hidepDialog();
 
-                        favorateModel.setReviewUserName(jo.getString("first_name")+jo.getString("last_name"));
-                        JSONObject image=jo.getJSONObject("profile_image");
-                        favorateModel.setReviewUserTampImage_url(image.getString("thumb"));
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            JSONObject object = response.getJSONObject(i);
+                            ReviewModel favorateModel=new ReviewModel();
+                            favorateModel.setReviewCommants(object.getString("message"));
+                            favorateModel.setReviewRatting(object.getString("overall"));
 
-                        cafeList.add(favorateModel);
+                            String media=object.getString("reply");
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                            JSONObject jo=object.getJSONObject("user");
+
+                            favorateModel.setReviewUserName(jo.getString("first_name")+jo.getString("last_name"));
+                            JSONObject image=jo.getJSONObject("profile_image");
+                            favorateModel.setReviewUserTampImage_url(image.getString("thumb"));
+
+                            cafeList.add(favorateModel);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
+
+                    hidepDialog();
+                    reviewAdapter = new ReviewAdapter(getActivity(),cafeList);
+                    reate_us.setAdapter(reviewAdapter);
                 }
+            }, new Response.ErrorListener() {
 
-                hidepDialog();
-                reviewAdapter = new ReviewAdapter(getActivity(),cafeList);
-                reate_us.setAdapter(reviewAdapter);
-            }
-        }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d(TAG, "Error: " + error.getMessage());
+                    Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    // hide the progress dialog
+                    hidepDialog();
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("Content-Type", "application/json");
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                // hide the progress dialog
-                hidepDialog();
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
+                    return params;
+                }
+            };
+            KalendriaAppController.getInstance().addToRequestQueue(jreq);
+        }
 
-                return params;
-            }
-        };
-        KalendriaAppController.getInstance().addToRequestQueue(jreq);
     }
 
 

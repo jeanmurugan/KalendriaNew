@@ -25,7 +25,7 @@
         android:layout_marginTop="5dp"
         android:gravity="right"
         android:text="17:30"
-        android:textColor="@android:color/black"
+        android:textColor="#0097db"
         android:textSize="@dimen/_12sdp" />
 
     <TextView
@@ -66,7 +66,8 @@
         android:layout_height="wrap_content"
         android:text="completd"
         android:textColor="@android:color/black"
-        android:textSize="@dimen/_12sdp"
+        android:textSize="@dimen/_11sdp"
+        android:padding="@dimen/_2sdp"
         android:layout_alignTop="@+id/myorder_price_or_points"
         android:layout_alignRight="@+id/myorder_service_name"
         android:layout_alignEnd="@+id/myorder_service_name"
