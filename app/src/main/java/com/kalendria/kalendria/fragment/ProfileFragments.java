@@ -55,6 +55,8 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.kalendria.kalendria.R;
 
+import com.kalendria.kalendria.activity.DashBoard;
+import com.kalendria.kalendria.activity.ResetPassword;
 import com.kalendria.kalendria.api.Constant;
 
 import com.kalendria.kalendria.utility.KalendriaAppController;
@@ -232,6 +234,13 @@ public class ProfileFragments extends Fragment {
 
 
     public  void onClickButton(){
+        register_reset_password_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ResetPassword.class);
+                startActivity(intent);
+            }
+        });
         btnsettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

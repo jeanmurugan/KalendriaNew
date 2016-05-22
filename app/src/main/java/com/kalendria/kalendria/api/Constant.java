@@ -33,6 +33,7 @@ public class Constant {
     public final static String VENUE_FILTER =HOST+"api/v1/search/search?";
     public final static String GET_RROFILE =HOST+"api/v1/user/";
     public final static String UPDATE_RROFILE =HOST+"api/v1/user/";
+    public final static String RESET_PASSWORD =HOST+"api/v1/user/";
 
 
     public static String getUserId(final Context context)
