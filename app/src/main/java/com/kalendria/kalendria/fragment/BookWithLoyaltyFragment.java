@@ -102,7 +102,7 @@ public class BookWithLoyaltyFragment extends Fragment {
                             System.out.println("result-->"+foo);
                         }
                     }
-
+                        Collections.sort(maxMin, BookWithLoyalityModel.sortPoints);
 
                         adapter1 = new BookWityLoyalityAdapter(maxMin,getActivity());
                         lv_book_with_loyalty.setAdapter(adapter1);
