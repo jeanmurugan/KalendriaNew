@@ -242,22 +242,18 @@ public class GooglePluseLogin extends Activity implements GoogleApiClient.OnConn
   */
     private void setPersonalInfo(Person currentPerson) {
 
-        String personName = currentPerson.getDisplayName();
-        String personPhotoUrl = currentPerson.getImage().getUrl();
+        String id = currentPerson.getId();
         String email = Plus.AccountApi.getAccountName(google_api_client);
-       /* TextView user_name = (TextView) findViewById(R.id.userName);
-        user_name.setText("Name: " + personName);
-        TextView gemail_id = (TextView) findViewById(R.id.emailId);
-        gemail_id.setText("Email Id: " + email);
-        TextView dob = (TextView) findViewById(R.id.dob);
-        dob.setText("DOB: " + currentPerson.getBirthday());
-        TextView tag_line = (TextView) findViewById(R.id.tag_line);
-        tag_line.setText("Tag Line: " + currentPerson.getTagline());
-        TextView about_me = (TextView) findViewById(R.id.about_me);
-        about_me.setText("About Me: " + currentPerson.getAboutMe());
-        setProfilePic(personPhotoUrl);*/
-        progress_dialog.dismiss();
-        Toast.makeText(this, "Person information is shown!", Toast.LENGTH_LONG).show();
+        String personName = currentPerson.getDisplayName();
+        String nikeName = currentPerson.getNickname();
+        int gender = currentPerson.getGender();
+
+        System.out.println("person details-->"+id+email+personName+nikeName+gender);
+
+       // String personPhotoUrl = currentPerson.getImage().getUrl();
+
+
+
     }
 
     private void changeUI(boolean signedIn) {

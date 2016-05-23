@@ -33,7 +33,7 @@
                 android:layout_span="1"
                 android:gravity="left"
                 android:padding="14dip"
-                android:text="Max"
+                android:text="Min"
                 android:textStyle="bold"
                 android:textColor="#000000" />
 
@@ -42,7 +42,7 @@
                 android:gravity="left"
                 android:padding="14dip"
                 android:textStyle="bold"
-                android:text="Min"
+                android:text="Max"
                 android:textColor="#000000" />
         </TableRow>
 
@@ -55,36 +55,41 @@
             <LinearLayout
                 android:layout_width="130dp"
                 android:layout_height="wrap_content"
-                android:background="#a09f9f"
-                android:orientation="horizontal">
+                android:background="#D6D6D6"
+                android:orientation="horizontal"
+                android:padding="@dimen/_5sdp">
 
 
 
                 <EditText
                     android:id="@+id/maximum_et"
-                    android:layout_width="@dimen/_60sdp"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_gravity="center"
                     android:background="@drawable/rectange_border_bookwithloyality"
                     />
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Points"
                     android:textColor="#0097db"
+                    android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_7sdp"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="130dp"
                 android:layout_height="wrap_content"
-                android:background="#a09f9f"
+                android:background="#D6D6D6"
+                android:padding="@dimen/_5sdp"
                 android:layout_marginLeft="@dimen/_13sdp">
 
                 <EditText
                     android:id="@+id/minimum_et"
                     android:layout_width="@dimen/_50sdp"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_gravity="center"
                     android:background="@drawable/rectange_border_bookwithloyality"
                    />
 
@@ -93,10 +98,12 @@
                     android:layout_height="wrap_content"
                     android:text="Points"
                     android:textColor="#0097db"
+                    android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_7sdp"/>
             </LinearLayout>
 
             <ImageView
+
                 android:id="@+id/searchImage"
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_30sdp"

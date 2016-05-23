@@ -77,8 +77,8 @@ public class BookWithLoyaltyFragment extends Fragment {
             public void onClick(View v) {
                 maxMin.clear();
 
-                    String max=maximum_et.getText().toString().trim();
-                    String min=minimum_et.getText().toString().trim();
+                    String min=maximum_et.getText().toString().trim();
+                    String max=minimum_et.getText().toString().trim();
 
                     if(max!=null &&min!=null ){
 
@@ -86,7 +86,9 @@ public class BookWithLoyaltyFragment extends Fragment {
                         int foo = Integer.parseInt(custum_list.get(i).getPoints());
                         int max1 = Integer.parseInt(max);
                         int min1 = Integer.parseInt(min);
-                        if(max1>=foo&&min1<=foo){
+
+                        if(min1<=foo && max1>=foo) {
+
                             BookWithLoyalityModel selectedModel=new BookWithLoyalityModel();
                             selectedModel.setId(custum_list.get(i).getId());
                             selectedModel.setName(custum_list.get(i).getName());

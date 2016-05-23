@@ -149,11 +149,11 @@ public class BookWithLoyalityModel {
             int points2 = Integer.parseInt(s2.getPoints());
 
     /*For ascending order*/
-            //return points1 - points2;
+            return points1 - points2;
 
     /*For descending order*/
             //points2-points1;
-            return points2 - points1;
+           // return points2 - points1;
 
 
         }};

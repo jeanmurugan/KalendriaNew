@@ -92,6 +92,7 @@ public class ResetPasswordFragament extends Fragment {
     JSONObject gcm_device_id = null;
     EditText old_password,new_password,confrim_password;
     Button reset_password_sumbit,register_back_btn;
+    String email;
     public ResetPasswordFragament() {
 
         // Required empty public constructor
@@ -118,6 +119,8 @@ public class ResetPasswordFragament extends Fragment {
         reset_password_sumbit=(Button) rootView.findViewById(R.id.reset_password_sumbit) ;
         register_back_btn=(Button) rootView.findViewById(R.id.register_back_btn) ;
 
+         email=Constant.getEmail();
+        System.out.println("email-->"+email);
         onclickButton();
 
         return rootView;
@@ -150,22 +153,20 @@ public class ResetPasswordFragament extends Fragment {
                     confrim_password.requestFocus();
                 }else{
                     if(KalendriaAppController.isNetworkConnected(getActivity())){
-                        makeJsonObjectRequest(moldPassword,mnewPassword);
+                        checkOldPassword(moldPassword,email);
+
                     }
                 }
             }
         });
     }
 
-    private void makeJsonObjectRequest(String oldpassword,String password) {
+    private void checkOldPassword(String oldpassword,String email) {
         try {
-
-
             gcm_device_id = new JSONObject();
+            gcm_device_id.put("identifier", email);
             gcm_device_id.put("password", oldpassword);
-            gcm_device_id.put("password_confirmation", password);
-            gcm_device_id.put("id", Constant.getUserId(getActivity()));
-            gcm_device_id.put("last_login", "");
+
             System.out.println("dfddf" + gcm_device_id);
 
         } catch (JSONException e) {
@@ -175,13 +176,103 @@ public class ResetPasswordFragament extends Fragment {
 
         showpDialog();
 
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Constant.CHECK_OLD_PASSWROD, gcm_device_id, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("tag", response.toString());
+                makeJsonObjectRequest();
+
+                hidepDialog();
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("Tag", "Error: " + error.getMessage());
+                String json;
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    try {
+                        json = new String(error.networkResponse.data, HttpHeaderParser.parseCharset(error.networkResponse.headers));
+                        Log.e("Error login-->", json);
+
+                        try {
+                            // Parsing json object response response will be a json object
+                            if (json != null) {
+
+                                JSONObject jsonObject = new JSONObject(json);
+
+                                String message = jsonObject.getString("message");
+                                // Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(getActivity());
+                                dlgAlert.setMessage(message);
+                                dlgAlert.setTitle("Kalendria ");
+                                dlgAlert.setPositiveButton("Ok",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                //dismiss the dialog
+                                                dialog.dismiss();
+
+                                            }
+                                        });
+                                dlgAlert.setCancelable(true);
+                                dlgAlert.create().show();
+
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            System.out.println("error"+e.getMessage());
+                           // Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+
+                    } catch (UnsupportedEncodingException e) {
+                        Log.e("Error 111", e.getMessage());
+                    }
+                }
+                hidepDialog();
+            }
+
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+
+                return params;
+            }
+        };
+
+
+        // Adding request to request queue
+        KalendriaAppController.getInstance().addToRequestQueue(jsonObjReq);
+    }
+    private void makeJsonObjectRequest() {
+        try {
+
+            String mnewPassword= new_password.getText().toString();
+            String mconfirPassword= confrim_password.getText().toString();
+            gcm_device_id = new JSONObject();
+            gcm_device_id.put("password", mnewPassword);
+            gcm_device_id.put("password_confirmation", mconfirPassword);
+            gcm_device_id.put("id", Constant.getUserId(getActivity()));
+            gcm_device_id.put("last_login", "");
+            System.out.println("dfddf" + gcm_device_id);
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Constant.RESET_PASSWORD+Constant.getUserId(getActivity()), gcm_device_id, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("tag", response.toString());
-
-
                     // Parsing json object response response will be a json object
                     if (response != null) {
                         Intent intent = new Intent(getActivity(), Login.class);
@@ -189,7 +280,6 @@ public class ResetPasswordFragament extends Fragment {
 
                         }
 
-                hidepDialog();
             }
         }, new Response.ErrorListener() {
 
