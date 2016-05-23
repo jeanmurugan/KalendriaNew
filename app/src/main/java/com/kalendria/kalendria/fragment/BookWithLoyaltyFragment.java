@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.kalendria.kalendria.R;
 
@@ -15,6 +18,9 @@ import com.kalendria.kalendria.R;
  */
 public class BookWithLoyaltyFragment extends Fragment {
 
+    EditText maximum_et,minimum_et;
+    ImageView searchImage;
+    ListView lv_book_with_loyalty;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +28,12 @@ public class BookWithLoyaltyFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.favorite_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.book_with_loyalty, container, false);
+        maximum_et=(EditText)rootView.findViewById(R.id.maximum_et);
+        minimum_et=(EditText)rootView.findViewById(R.id.minimum_et);
+        searchImage=(ImageView)rootView.findViewById(R.id.searchImage);
+        lv_book_with_loyalty=(ListView) rootView.findViewById(R.id.lv_book_with_loyalty);
+
         return rootView;
     }
 
