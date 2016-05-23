@@ -81,6 +81,7 @@ public class BookWithLoyaltyFragment extends Fragment {
                     String min=minimum_et.getText().toString().trim();
 
                     if(max!=null &&min!=null ){
+
                         for(int i=0;i<custum_list.size();i++) {
                         int foo = Integer.parseInt(custum_list.get(i).getPoints());
                         int max1 = Integer.parseInt(max);

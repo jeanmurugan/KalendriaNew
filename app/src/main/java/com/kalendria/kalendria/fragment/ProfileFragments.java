@@ -196,6 +196,7 @@ public class ProfileFragments extends Fragment {
         get_radio_group_values();
 
         if (KalendriaAppController.isNetworkConnected(getActivity())){
+            getCityList();
             getProfile();
         }else{
             Toast.makeText(getActivity(), "Please Check Your Internet", Toast.LENGTH_SHORT).show();
@@ -321,7 +322,33 @@ public class ProfileFragments extends Fragment {
             public void onClick(View v) {
 
                 if(KalendriaAppController.isNetworkConnected(getActivity())){
-                    getCityList();
+                    //getCityList();
+                    try {
+                        final ArrayAdapter<String> spinner_countries = new ArrayAdapter<String>(getActivity(),
+                                android.R.layout.simple_spinner_dropdown_item, cityTextArray);
+
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle("Kalendria")
+                                .setAdapter(spinner_countries, new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        register_spinner.setText(cityTextArray.get(which).toString());
+                                        spinner_selected_id= cityModelArray.get(which).getId();
+                                        spinner_name= cityModelArray.get(which).getName();
+                                        spinner_type= cityModelArray.get(which).getType();
+                                        spinner_parent= cityModelArray.get(which).getParent();
+                                        //String imc_met = cityText.getSelectedItem().toString();
+
+                                        dialog.dismiss();
+                                    }
+                                }).create().show();
+
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 }else{
                     Toast.makeText(getActivity(), "Please check internet... ", Toast.LENGTH_SHORT).show();
                 }
@@ -850,7 +877,15 @@ public class ProfileFragments extends Fragment {
                         register_email_et.setText(email);
                         register_address_et.setText(address);
                         register_phone_et.setText(phone);
-                        register_spinner.setText(city);
+
+                        if(!city.equals("")){
+                            for(int i=0;i<cityModelArray.size();i++){
+
+                                    if(city.equalsIgnoreCase(cityModelArray.get(i).getId())){
+                                        register_spinner.setText(cityModelArray.get(i).getName());
+                                    }
+                            }
+                        }
 
                             if(!profile_image.equalsIgnoreCase("null")){
                                 JSONObject object=new JSONObject(profile_image);
@@ -871,7 +906,7 @@ public class ProfileFragments extends Fragment {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
                 hidepDialog();
             }
@@ -886,7 +921,6 @@ public class ProfileFragments extends Fragment {
                         json = new String(error.networkResponse.data, HttpHeaderParser.parseCharset(error.networkResponse.headers));
                         Log.e("Error login-->", json);
 
-
                         try {
                             // Parsing json object response response will be a json object
                             if (json != null) {
@@ -899,7 +933,7 @@ public class ProfileFragments extends Fragment {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                           // Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
 
                     } catch (UnsupportedEncodingException e) {
@@ -1074,7 +1108,7 @@ public class ProfileFragments extends Fragment {
                                 }
                             }
 
-                            try {
+                           /* try {
                                 final ArrayAdapter<String> spinner_countries = new ArrayAdapter<String>(getActivity(),
                                         android.R.layout.simple_spinner_dropdown_item, cityTextArray);
 
@@ -1099,7 +1133,7 @@ public class ProfileFragments extends Fragment {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-
+*/
                         }else{
                             // if responce is null write your commants here
                         }

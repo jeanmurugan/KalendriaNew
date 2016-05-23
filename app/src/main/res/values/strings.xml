@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Kalendria</string>
 
+    <string name="sign_out">Sign Out</string>
+    <string name="disconnect">Disconnect</string>
+
     <string name="facebook_app_id">231842707152422</string>
 
     <string name="discuss_about_header">Choose your city</string>

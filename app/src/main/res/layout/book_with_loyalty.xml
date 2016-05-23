@@ -32,63 +32,86 @@
 
                 android:layout_span="1"
                 android:gravity="left"
-                android:padding="10dip"
-                android:text="Max"
+                android:padding="14dip"
+                android:text="Min"
+                android:textStyle="bold"
                 android:textColor="#000000" />
 
             <TextView
                 android:layout_marginRight="@dimen/_45sdp"
                 android:gravity="left"
-                android:padding="10dip"
-                android:text="Min"
+                android:padding="14dip"
+                android:textStyle="bold"
+                android:text="Max"
                 android:textColor="#000000" />
         </TableRow>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/_50sdp"
-            android:background="#a09f9f"
             android:orientation="horizontal"
             android:padding="@dimen/_10sdp">
 
-            <EditText
-                android:id="@+id/maximum_et"
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="@dimen/_30sdp"
-                android:background="@drawable/rectange_border_bookwithloyality" />
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_3sdp"
-                android:text="Points" />
+                android:background="#a09f9f"
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/minimum_et"
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="@dimen/_30sdp"
-                android:background="@drawable/rectange_border_bookwithloyality" />
 
-            <TextView
-                android:layout_width="wrap_content"
+
+                <EditText
+                    android:id="@+id/maximum_et"
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:background="@drawable/rectange_border_bookwithloyality"
+                    />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="Points"
+                    android:textColor="#0097db"
+                    android:layout_marginLeft="@dimen/_7sdp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_3sdp"
-                android:text="Points" />
+                android:background="#a09f9f"
+                android:layout_marginLeft="@dimen/_13sdp">
+
+                <EditText
+                    android:id="@+id/minimum_et"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:background="@drawable/rectange_border_bookwithloyality"
+                   />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Points"
+                    android:textColor="#0097db"
+                    android:layout_marginLeft="@dimen/_7sdp"/>
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/searchImage"
-                android:layout_width="@dimen/_40sdp"
+                android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_12sdp"
                 android:background="@drawable/rectange_border_bookwithloyality"
                 android:padding="@dimen/_8sdp"
-                android:src="@drawable/searchs" />
+                android:src="@drawable/searchs"
+              />
 
 
         </LinearLayout>
 
-
     </TableLayout>
+
 
     <ListView
         android:id="@+id/lv_book_with_loyalty"
@@ -97,4 +120,3 @@
 
     </ListView>
 </LinearLayout>
-
