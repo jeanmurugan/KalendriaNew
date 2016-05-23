@@ -186,6 +186,7 @@ public class FragmentDrawer extends Fragment {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                setUserDetails();//code added by Magesh
                 getActivity().invalidateOptionsMenu();
             }
 

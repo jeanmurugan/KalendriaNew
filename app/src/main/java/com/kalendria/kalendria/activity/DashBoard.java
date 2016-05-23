@@ -33,6 +33,7 @@ import com.kalendria.kalendria.api.Constant;
 import com.kalendria.kalendria.model.AddToCardServiceModel;
 import com.kalendria.kalendria.model.AddToCardVenueModel;
 import com.kalendria.kalendria.singleton.AddToCardSingleTone;
+import com.kalendria.kalendria.utility.CommonSingleton;
 import com.kalendria.kalendria.utility.FragmentDrawer;
 import com.kalendria.kalendria.R;
 import com.kalendria.kalendria.fragment.ProfileFragments;
@@ -67,6 +68,7 @@ public class DashBoard extends AppCompatActivity implements FragmentDrawer.Fragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homepage);
+        CommonSingleton.getInstance().fetchCityList();
         getUserProfileInformation();
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         tv=(TextView) findViewById(R.id.tv);

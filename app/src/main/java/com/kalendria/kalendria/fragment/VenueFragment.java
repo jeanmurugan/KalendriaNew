@@ -819,13 +819,18 @@ public class VenueFragment extends Fragment {
                         subcategoriesHeaderstring.add(jsonObject.getString("name"));
                         subcategoriesHeadermodel.add(subcategoryHeader);
 
-                    } else if (level.equalsIgnoreCase("sub_category 2")){
-                        SubCategoryChild subcategory=new SubCategoryChild();
+                    } else if (level.equalsIgnoreCase("sub_category 2")) {
+                        SubCategoryChild subcategory = new SubCategoryChild();
                         subcategory.setSubcategoryId(jsonObject.getString("id"));
                         subcategory.setSubcategoryName(jsonObject.getString("name"));
                         subcategory.setParentId(jsonObject.getString("parent"));
                         subcategoriesChildStringArray.add(jsonObject.getString("name"));
                         subcategoriesChildmodelArray.add(subcategory);
+
+                        String ChildId = Constant.subCategeryChildId(getActivity());
+                        if (subcategory.getSubcategoryId().equalsIgnoreCase( ChildId))
+                            selected_category.setText(subcategory.getSubcategoryName());
+
                     }
 
                 }

@@ -55,11 +55,13 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.kalendria.kalendria.R;
 
-import com.kalendria.kalendria.activity.DashBoard;
 import com.kalendria.kalendria.activity.ResetPassword;
 import com.kalendria.kalendria.api.Constant;
 
+import com.kalendria.kalendria.model.RegisterSpinner;
+import com.kalendria.kalendria.utility.CommonSingleton;
 import com.kalendria.kalendria.utility.KalendriaAppController;
+import com.kalendria.kalendria.utility.SafeParser;
 import com.kalendria.kalendria.utility.Validator;
 import com.squareup.picasso.Picasso;
 
@@ -119,11 +121,11 @@ public class ProfileFragments extends Fragment {
     String radiogroup_value;
     String spinner_selected_id,spinner_name,spinner_type,spinner_parent;
     List<String> cityTextArray;
-    ArrayList<com.kalendria.kalendria.model.RegisterSpinner> cityModelArray =new ArrayList<com.kalendria.kalendria.model.RegisterSpinner>();
+    ArrayList<RegisterSpinner> cityModelArray =new ArrayList<RegisterSpinner>();
     public static String Tag = ProfileFragments.class.getSimpleName();
     RadioGroup radioGroup;
     EditText register_username_et,register_lastname_et,register_phone_et,register_email_et,register_address_et;
-    TextView register_spinner;
+    TextView txtCity;
     Button register_submit_btn,register_reset_password_btn;
     View rootView;
     Button btnsettings;
@@ -158,7 +160,7 @@ public class ProfileFragments extends Fragment {
         pDialog.setMessage("Please wait...");
         pDialog.setCancelable(false);
         radioGroup = (RadioGroup) rootView.findViewById(R.id.register_radiogroup);
-        register_spinner = (TextView) rootView.findViewById(R.id.register_spinner);
+        txtCity = (TextView) rootView.findViewById(R.id.textCity);
         register_submit_btn = (Button) rootView.findViewById(R.id.register_submit_btn);
         register_reset_password_btn = (Button) rootView.findViewById(R.id.register_reset_password_btn);
 
@@ -192,8 +194,13 @@ public class ProfileFragments extends Fragment {
         register_address_et.setClickable(false); // user navigates with wheel and selects widget
 
 
+        cityTextArray = CommonSingleton.getInstance().getCityList();
+        cityModelArray = CommonSingleton.getInstance().getCityMode();
         onClickButton();
         get_radio_group_values();
+        //Coded by Magesh, assuming onCreate View is not in Edit mode
+        meditOption=false;
+        changeEditMode(meditOption);
 
         if (KalendriaAppController.isNetworkConnected(getActivity())){
             getProfile();
@@ -211,6 +218,7 @@ public class ProfileFragments extends Fragment {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // checkedId is the RadioButton selected
+
 
                 try {
                     switch (checkedId) {
@@ -232,8 +240,79 @@ public class ProfileFragments extends Fragment {
         });
     }
 
+    //coded by Magesh
+    public void changeEditMode(boolean isEditMode)
+    {
+        if(isEditMode){
+
+            for (int i = 0; i < radioGroup.getChildCount(); i++) {
+                radioGroup.getChildAt(i).setEnabled(true);
+            }
+            btnsettings.setBackgroundResource(R.drawable.delete);
+            register_submit_btn.setVisibility(View.VISIBLE);
+            register_reset_password_btn.setVisibility(View.GONE);
+
+            register_username_et.setFocusable(true);
+            register_username_et.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
+            register_username_et.setClickable(true); // user navigates with wheel and selects widget
+
+
+            register_lastname_et.setFocusable(true);
+            register_lastname_et.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
+            register_lastname_et.setClickable(true); // user navigates with wheel and selects widget
+
+
+            register_phone_et.setFocusable(true);
+            register_phone_et.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
+            register_phone_et.setClickable(true); // user navigates with wheel and selects widget
+
+
+            register_email_et.setFocusable(true);
+            register_email_et.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
+            register_email_et.setClickable(true); // user navigates with wheel and selects widget
+
+
+            register_address_et.setFocusable(true);
+            register_address_et.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
+            register_address_et.setClickable(true); // user navigates with wheel and selects widget
+        }else{
+
+            for (int i = 0; i < radioGroup.getChildCount(); i++) {
+                radioGroup.getChildAt(i).setEnabled(false);
+            }
+            register_submit_btn.setVisibility(View.GONE);
+            register_reset_password_btn.setVisibility(View.VISIBLE);
+            btnsettings.setBackgroundResource(R.drawable.edit_icon);
+            register_username_et.setFocusable(false);
+            register_username_et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
+            register_username_et.setClickable(false); // user navigates with wheel and selects widget
+
+
+            register_lastname_et.setFocusable(false);
+            register_lastname_et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
+            register_lastname_et.setClickable(false); // user navigates with wheel and selects widget
+
+
+            register_phone_et.setFocusable(false);
+            register_phone_et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
+            register_phone_et.setClickable(false); // user navigates with wheel and selects widget
+
+
+            register_email_et.setFocusable(false);
+            register_email_et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
+            register_email_et.setClickable(false); // user navigates with wheel and selects widget
+
+
+            register_address_et.setFocusable(false);
+            register_address_et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
+            register_address_et.setClickable(false); // user navigates with wheel and selects widget
+        }
+
+    }
+
 
     public  void onClickButton(){
+
         register_reset_password_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -241,68 +320,20 @@ public class ProfileFragments extends Fragment {
                 startActivity(intent);
             }
         });
+
         btnsettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(meditOption){
-                    meditOption=false;
-                    btnsettings.setBackgroundResource(R.drawable.edit_icon);
-                    register_submit_btn.setVisibility(View.VISIBLE);
-                    register_reset_password_btn.setVisibility(View.GONE);
-                    register_username_et.setFocusable(true);
-                    register_username_et.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
-                    register_username_et.setClickable(true); // user navigates with wheel and selects widget
 
-
-                    register_lastname_et.setFocusable(true);
-                    register_lastname_et.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
-                    register_lastname_et.setClickable(true); // user navigates with wheel and selects widget
-
-
-                    register_phone_et.setFocusable(true);
-                    register_phone_et.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
-                    register_phone_et.setClickable(true); // user navigates with wheel and selects widget
-
-
-                    register_email_et.setFocusable(true);
-                    register_email_et.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
-                    register_email_et.setClickable(true); // user navigates with wheel and selects widget
-
-
-                    register_address_et.setFocusable(true);
-                    register_address_et.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
-                    register_address_et.setClickable(true); // user navigates with wheel and selects widget
-                }else{
-                    meditOption=true;
-                    register_submit_btn.setVisibility(View.GONE);
-                    register_reset_password_btn.setVisibility(View.VISIBLE);
-                    btnsettings.setBackgroundResource(R.drawable.delete);
-                    register_username_et.setFocusable(false);
-                    register_username_et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
-                    register_username_et.setClickable(false); // user navigates with wheel and selects widget
-
-
-                    register_lastname_et.setFocusable(false);
-                    register_lastname_et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
-                    register_lastname_et.setClickable(false); // user navigates with wheel and selects widget
-
-
-                    register_phone_et.setFocusable(false);
-                    register_phone_et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
-                    register_phone_et.setClickable(false); // user navigates with wheel and selects widget
-
-
-                    register_email_et.setFocusable(false);
-                    register_email_et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
-                    register_email_et.setClickable(false); // user navigates with wheel and selects widget
-
-
-                    register_address_et.setFocusable(false);
-                    register_address_et.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
-                    register_address_et.setClickable(false); // user navigates with wheel and selects widget
+                if(meditOption) {
+                    meditOption = false;
                 }
-
+                else
+                {
+                    meditOption=true;
+                }
+                changeEditMode(meditOption);
 
             }
         });
@@ -316,9 +347,12 @@ public class ProfileFragments extends Fragment {
                     e.printStackTrace();
                 }
             }
-        }); register_spinner.setOnClickListener(new View.OnClickListener() {
+        }); txtCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //coded by magesh: to avoid click event in non-edit mode
+                if(!meditOption) return;
 
                 if(KalendriaAppController.isNetworkConnected(getActivity())){
                     getCityList();
@@ -334,56 +368,57 @@ public class ProfileFragments extends Fragment {
             public void onClick(View v) {
 
                 try {
-                    String  username = register_username_et.getText().toString().trim();
-                    String  lastName = register_lastname_et.getText().toString().trim();
-                    String  city = register_spinner.getText().toString().trim();
-                    String  phone = register_phone_et.getText().toString().trim();
-                    String   email = register_email_et.getText().toString().trim();
-                    String address= register_address_et.getText().toString().trim();
+                    if (meditOption) {
+                        String username = register_username_et.getText().toString().trim();
+                        String lastName = register_lastname_et.getText().toString().trim();
+                        String city = txtCity.getText().toString().trim();
+                        String phone = register_phone_et.getText().toString().trim();
+                        String email = register_email_et.getText().toString().trim();
+                        String address = register_address_et.getText().toString().trim();
 
 
-                    if(TextUtils.isEmpty(username)){
-                        register_username_et.setError("Please enter Your First Name");
-                        register_username_et.requestFocus();
-                    }
-                    else if(TextUtils.isEmpty(lastName)){
-                        register_lastname_et.setError("Please enter Your Last Name");
-                        register_lastname_et.requestFocus();
-                    }
-                    else if(TextUtils.isEmpty(city)){
-                        register_spinner.setError("Please enter Your city Name");
-                        register_spinner.requestFocus();
-                    }
-                    else if( TextUtils.isEmpty(phone)){
-                        register_phone_et.setError("Please enter Your Number!");
-                        register_phone_et.requestFocus();
-                    }
-                    else if(TextUtils.isEmpty(email) )
-                    {
-                        register_email_et.setError("Please enter a valid email id");
-                        register_email_et.requestFocus();
-                    }else if(!Validator.isEmailValid(email)){
-                        register_email_et.setError("Please enter a valid email id");
-                        register_email_et.requestFocus();
-                    }
+                        if (TextUtils.isEmpty(username)) {
+                            register_username_et.setError("Please enter Your First Name");
+                            register_username_et.requestFocus();
+                        } else if (TextUtils.isEmpty(lastName)) {
+                            register_lastname_et.setError("Please enter Your Last Name");
+                            register_lastname_et.requestFocus();
+                        } else if (TextUtils.isEmpty(city)) {
+                            txtCity.setError("Please enter Your city Name");
+                            txtCity.requestFocus();
+                        } else if (TextUtils.isEmpty(phone)) {
+                            register_phone_et.setError("Please enter Your Number!");
+                            register_phone_et.requestFocus();
+                        } else if (TextUtils.isEmpty(email)) {
+                            register_email_et.setError("Please enter a valid email id");
+                            register_email_et.requestFocus();
+                        } else if (!Validator.isEmailValid(email)) {
+                            register_email_et.setError("Please enter a valid email id");
+                            register_email_et.requestFocus();
+                        }
 
                    /*  else if(TextUtils.isEmpty(address)){
                          register_address_et.setError("Please enter Your First Name");
                          register_address_et.requestFocus();
                      }*/
 
-                    else {
+                        else {
 
-                        if (KalendriaAppController.getInstance().isNetworkConnected(getActivity())) {
-                            makeJsonObjectRequest(username,lastName,city,email,phone,address);
-                        }else{
-                            Toast.makeText(getActivity(),"Please Check your internet connection",Toast.LENGTH_LONG).show();
+                            if (KalendriaAppController.getInstance().isNetworkConnected(getActivity())) {
+                                makeJsonObjectRequest(username, lastName, city, email, phone, address);
+                            } else {
+                                Toast.makeText(getActivity(), "Please Check your internet connection", Toast.LENGTH_LONG).show();
+                            }
+
                         }
+                    } else // Reset Password
+                    {
 
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
 
             }
         });
@@ -393,7 +428,7 @@ public class ProfileFragments extends Fragment {
 
     protected void selectImage() {
 
-        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Clear Photo"};
+        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Add Photo!");
@@ -411,7 +446,7 @@ public class ProfileFragments extends Fragment {
                     Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(intent, 2);
 
-                } else if (options[item].equals("Clear Photo")) {
+                } else if (options[item].equals("Cancel")) {
 
                     //profilepicture.setImageResource(R.drawable.profile);
 
@@ -823,6 +858,7 @@ public class ProfileFragments extends Fragment {
 
 
         showpDialog();
+
         String url=Constant.GET_RROFILE+Constant.getUserId(getActivity());
         System.out.println("getprofile_url-->"+url);
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -842,7 +878,20 @@ public class ProfileFragments extends Fragment {
                         String phone = response.getString("phone");
                         String address = response.getString("address");
                         String profile_image = response.getString("profile_image");
-                        System.out.println("imagepfofile_muru"+profile_image);
+                        System.out.println("imagepfofile_muru" + profile_image);
+                        String points = response.getString("points");
+                        String wallets = response.getString("credit");
+
+                        Constant.setCity(city);
+                        Constant.setFirstName(first_name);
+                        Constant.setLastName(last_name);
+                        Constant.setEmail(email);
+                        Constant.setProfileImage(profile_image);
+                        Constant.savedData(gender, "kGenderKey");
+                        Constant.savedData(address, "kAddressKey");
+                        Constant.savedData(phone, "kphoneKey");
+                        Constant.savedData(points,"kLoyalityKey");
+                        Constant.savedData(wallets, "kWalletsKey");
 
 
                         register_username_et.setText(first_name);
@@ -850,21 +899,39 @@ public class ProfileFragments extends Fragment {
                         register_email_et.setText(email);
                         register_address_et.setText(address);
                         register_phone_et.setText(phone);
-                        register_spinner.setText(city);
 
-                            if(!profile_image.equalsIgnoreCase("null")){
+                        for (RegisterSpinner spinner : cityModelArray)
+                        {
+                            if(spinner.getId().equalsIgnoreCase(city))
+                            {
+                                txtCity.setText(spinner.getName());
+                                spinner_selected_id=spinner.getId();
+                                spinner_name= spinner.getName();
+                                spinner_type= spinner.getType();
+                                spinner_parent= spinner.getParent();
+
+                                break;
+                            }
+
+                        }
+
+                        //register_spinner.setText(city);
+
+                            if(profile_image!=null && !profile_image.equalsIgnoreCase("null")){
                                 JSONObject object=new JSONObject(profile_image);
-                                String imageUrl=object.getString("thumb");
-                                Picasso.with(getActivity())
-                                        .load(imageUrl)
-                                        // .memoryPolicy(MemoryPolicy.NO_CACHE )
-                                        // .networkPolicy(NetworkPolicy.NO_CACHE)
-                                        //.resize(720, 350)
-                                        // .error(R.drawable.login)
-                                        .placeholder(R.drawable.profile)
-                                        .noFade()
-                                        // .fit().centerCrop()
-                                        .into(btnCapturePicture);
+                                if(object.has("thumb")) {
+                                    String imageUrl = object.getString("thumb");
+                                    Picasso.with(getActivity())
+                                            .load(imageUrl)
+                                                    // .memoryPolicy(MemoryPolicy.NO_CACHE )
+                                                    // .networkPolicy(NetworkPolicy.NO_CACHE)
+                                                    //.resize(720, 350)
+                                                    // .error(R.drawable.login)
+                                            .placeholder(R.drawable.profile)
+                                            .noFade()
+                                                    // .fit().centerCrop()
+                                            .into(btnCapturePicture);
+                                }
                             }
                         }
 
@@ -925,7 +992,7 @@ public class ProfileFragments extends Fragment {
         KalendriaAppController.getInstance().addToRequestQueue(jsonObjReq);
     }
 
-    private void makeJsonObjectRequest( String username,String lastName,String city,String email,String phone,String address) {
+    private void makeJsonObjectRequest( final String username, final String lastName, final String city, final String email, final String phone, final String address) {
 
         JSONObject parentData = new JSONObject();
         JSONObject jsonObject = new JSONObject();
@@ -997,7 +1064,16 @@ public class ProfileFragments extends Fragment {
             public void onResponse(JSONObject response) {
                 Log.d(Tag, response.toString());
 
+                Constant.setCity(spinner_selected_id);
+                Constant.setFirstName(username);
+                Constant.setLastName(lastName);
+                Constant.setEmail(email);
+                Constant.savedData(address, "kAddressKey");
+                Constant.savedData(phone, "kphoneKey");
+
+
                 hidepDialog();
+                getProfile();
             }
 
 
@@ -1041,102 +1117,35 @@ public class ProfileFragments extends Fragment {
 
     private void getCityList() {
 
-        showpDialog();
+        cityTextArray = CommonSingleton.getInstance().getCityList();
+        cityModelArray = CommonSingleton.getInstance().getCityMode();
+
         try {
-            JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, Constant.REGISTER_SPINNER, null, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    Log.d(Tag, response.toString());
+            final ArrayAdapter<String> spinner_countries = new ArrayAdapter<String>(getActivity(),
+                    android.R.layout.simple_spinner_dropdown_item, cityTextArray);
 
-                    try {
-                        // Parsing json object response response will be a json object
-                        if (response != null) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Kalendria")
+                    .setAdapter(spinner_countries, new DialogInterface.OnClickListener() {
 
+                        public void onClick(DialogInterface dialog, int which) {
+                            txtCity.setText(cityTextArray.get(which).toString());
+                            spinner_selected_id= cityModelArray.get(which).getId();
+                            spinner_name= cityModelArray.get(which).getName();
+                            spinner_type= cityModelArray.get(which).getType();
+                            spinner_parent= cityModelArray.get(which).getParent();
+                            //String imc_met = cityText.getSelectedItem().toString();
 
-                            JSONArray jsonArray = response.getJSONArray("locations");
-                            System.out.println("size of json array"+jsonArray.length());
-
-                            cityTextArray = new ArrayList<>();
-                            for(int i=0;i<jsonArray.length();i++) {
-
-                                JSONObject jsonObject=jsonArray.getJSONObject(i);
-                                com.kalendria.kalendria.model.RegisterSpinner homePage_model=new com.kalendria.kalendria.model.RegisterSpinner();
-                                homePage_model.setType(jsonObject.getString("type"));
-                                String type=jsonObject.getString("type");
-
-                                if(type.equalsIgnoreCase("city")  )
-                                {
-                                    homePage_model.setParent(jsonObject.getString("parent"));
-                                    homePage_model.setId(jsonObject.getString("id"));
-                                    homePage_model.setName(jsonObject.getString("name"));
-                                    cityTextArray.add(jsonObject.getString("name"));
-                                    cityModelArray.add(homePage_model);
-                                }
-                            }
-
-                            try {
-                                final ArrayAdapter<String> spinner_countries = new ArrayAdapter<String>(getActivity(),
-                                        android.R.layout.simple_spinner_dropdown_item, cityTextArray);
-
-                                new AlertDialog.Builder(getActivity())
-                                        .setTitle("Kalendria")
-                                        .setAdapter(spinner_countries, new DialogInterface.OnClickListener() {
-
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                register_spinner.setText(cityTextArray.get(which).toString());
-                                                spinner_selected_id= cityModelArray.get(which).getId();
-                                                spinner_name= cityModelArray.get(which).getName();
-                                                spinner_type= cityModelArray.get(which).getType();
-                                                spinner_parent= cityModelArray.get(which).getParent();
-                                                //String imc_met = cityText.getSelectedItem().toString();
-
-                                                dialog.dismiss();
-                                            }
-                                        }).create().show();
-
-
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                        }else{
-                            // if responce is null write your commants here
+                            dialog.dismiss();
                         }
-
-                    }
-                    catch (JSONException e)
-                    {
-                        e.printStackTrace();
-                        Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                    hidepDialog();
-                }
-            }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    VolleyLog.d(Tag, "Error: " + error.getMessage());
-                    Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                    // hide the progress dialog
-                    hidepDialog();
-                }
-            }) {
-
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("Content-Type", "application/json");
-                    return params;
-                }
-            };
+                    }).create().show();
 
 
-            // Adding request to request queue
-            KalendriaAppController.getInstance().addToRequestQueue(jsonObjReq);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 
