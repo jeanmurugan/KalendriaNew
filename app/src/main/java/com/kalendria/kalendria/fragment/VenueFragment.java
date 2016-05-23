@@ -780,8 +780,6 @@ public class VenueFragment extends Fragment {
     }
 
 
-
-
     private void getFiler(){
 
 

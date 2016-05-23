@@ -55,8 +55,7 @@
                 android:id="@+id/maximum_et"
                 android:layout_width="@dimen/_80sdp"
                 android:layout_height="@dimen/_30sdp"
-                android:background="@drawable/rectange_border_bookwithloyality"
-                android:textCursorDrawable="@null" />
+                android:background="@drawable/rectange_border_bookwithloyality" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -68,8 +67,7 @@
                 android:id="@+id/minimum_et"
                 android:layout_width="@dimen/_80sdp"
                 android:layout_height="@dimen/_30sdp"
-                android:background="@drawable/rectange_border_bookwithloyality"
-                android:textCursorDrawable="@null" />
+                android:background="@drawable/rectange_border_bookwithloyality" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -79,11 +77,11 @@
 
             <ImageView
                 android:id="@+id/searchImage"
-                android:layout_width="@dimen/_45sdp"
+                android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_gravity="center"
                 android:background="@drawable/rectange_border_bookwithloyality"
-                android:padding="@dimen/_5sdp"
+                android:padding="@dimen/_8sdp"
                 android:src="@drawable/searchs" />
 
 
