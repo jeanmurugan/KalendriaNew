@@ -580,18 +580,19 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
 
     public void onShowStaffPicker(int position,AddToCardServiceModel data)
     {
-
+        tempEmpolyees.clear();
         selectedItemIndex=position;
         showStaffPicker();
 
     }
     public void showStaffPicker()
     {
-        tempEmpolyees.clear();
-        tempEmpolyees.addAll(arrEmployes);
-        staffListAdapter.notifyDataSetChanged();
-        staffDialog.show();
 
+        staffDialog.show();
+        if(arrEmployes!=null)
+        tempEmpolyees.addAll(arrEmployes);
+
+        staffListAdapter.notifyDataSetChanged();
     }
 
     ArrayList tempEmpolyees;
