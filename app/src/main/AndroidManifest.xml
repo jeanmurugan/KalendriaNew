@@ -114,6 +114,10 @@
             android:name=".activity.ResetPassword"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.GooglePluseLogin"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
 
     </application>
 

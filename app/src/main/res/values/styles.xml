@@ -45,4 +45,10 @@
         <item name="android:background">@color/autosearch</item>
     </style>
 
+
+    <style name="StarRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/custome_ratingbar</item>
+
+    </style>
+
 </resources>

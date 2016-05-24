@@ -18,12 +18,14 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -50,7 +52,7 @@ import java.util.Map;
 
 public class Login extends Activity {
 
-    Button singup_btn,login_btn,password;
+    Button singup_btn,login_btn,password, google_Login;
     EditText mybrands_totalPoints_text_textview,password_et;
     TextView forgot_password_txt,singup_txt;
     LoginButton login;
@@ -180,10 +182,6 @@ public class Login extends Activity {
             }
         });
 
-        //Fb login method end
-
-
-
     }
 
 
@@ -213,7 +211,10 @@ public class Login extends Activity {
 
         forgot_password_txt=(TextView)findViewById(R.id.forgot_password_txt);
 
+        google_Login = (Button)findViewById(R.id.google_pluse);
     }
+
+
     private void onClick_button(){
         singup_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,6 +225,18 @@ public class Login extends Activity {
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
             }
         });
+
+        google_Login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(Login.this, "google pluse login", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Login.this,  GooglePluseLogin.class);
+                startActivity(intent);
+
+            }
+        });
+
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -264,11 +277,16 @@ public class Login extends Activity {
             }
         });
 
+
+
     }
 
 
 
     private void makeJsonObjectRequest(String email,String password) {
+
+
+
         try {
             gcm_device_id = new JSONObject();
             gcm_device_id.put("identifier", email);
@@ -533,5 +551,7 @@ public class Login extends Activity {
         System.exit(0);
         super.onBackPressed();
     }
+
+
 
 }
