@@ -232,8 +232,6 @@ public class DashBoard extends AppCompatActivity implements FragmentDrawer.Fragm
 
     private void getUserProfileInformation() {
 
-
-
         String url= Constant.GET_RROFILE+Constant.getUserId(this);
         System.out.println("getprofile_url-->" + url);
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

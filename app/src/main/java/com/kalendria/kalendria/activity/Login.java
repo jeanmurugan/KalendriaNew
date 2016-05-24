@@ -18,12 +18,14 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -275,11 +277,16 @@ public class Login extends Activity {
             }
         });
 
+
+
     }
 
 
 
     private void makeJsonObjectRequest(String email,String password) {
+
+
+
         try {
             gcm_device_id = new JSONObject();
             gcm_device_id.put("identifier", email);
@@ -542,5 +549,7 @@ public class Login extends Activity {
         System.exit(0);
         super.onBackPressed();
     }
+
+
 
 }
