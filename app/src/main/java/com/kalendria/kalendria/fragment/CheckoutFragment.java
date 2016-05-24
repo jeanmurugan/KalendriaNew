@@ -55,6 +55,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Time;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
-public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemClickListener,CheckOutAdapter.CheckOutAdapterDelegate {
+public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckOutAdapterDelegate {
     TextView week;
     Button per,next;
     RecyclerView daysList;
@@ -151,13 +152,7 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
         return view;
     }
 
-    @Override
-    public void onItemClick(TimeBean currentListData, int position)
-    {
-        //int index = ArrayUtils.indexOf(currentListData.getCal_time());
-        selectedTime = currentListData.getCal_time();
 
-    }
     public void  loadTimes()
     {
         arrTime = new String[] {"07:00","07:15","07:30","07:45","08:00","08:15","08:30","08:45",
@@ -216,6 +211,7 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
         }
         txtTotalPrice.setText(""+totalAmount+" AED");
         checkOutAdapter.notifyDataSetChanged();
+        validateStaff();//check and enable check button
     }
 
     public void cartList(){
@@ -337,13 +333,22 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
     public void setCustomAdapterListner()
     {
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                customAdapter.selectedIndex = position;
+                customAdapter.notifyDataSetChanged();
+                TimeBean currentListData = myList.get(position);
+                selectedTime = currentListData.getCal_time();
+                resetAppointmentDate();
+
+            }
+        });
         customAdapter.SetOnItemClickListener(new CustomAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(TimeBean currentListData, int position) {
-                customAdapter.selectedIndex = position;
-                customAdapter.notifyDataSetChanged();
-                selectedTime = currentListData.getCal_time();
-                resetAppointmentDate();
+
 
             }
         });
@@ -390,9 +395,11 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
             nowMin += (15 - rem);
             String strTime = String.format("%02d", nowHour) + ":" + String.format("%02d", nowMin);
             intStartIndex = ArrayUtils.indexOf(arrTime, strTime);
+
         }
 
-        {
+
+
             if(dictWorkingHours!=null && dictWorkingHours.size()>0)
             {
 
@@ -401,7 +408,7 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
                 endIndex = ArrayUtils.indexOf(arrTime, dayObject.getEnd_time());
 
             }
-        }
+
         if(intTodayIndex>intStartIndex)
             intStartIndex=intTodayIndex;
 
@@ -422,7 +429,7 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
             selectedTime = tb.getCal_time();
         }
         if(customAdapter==null) {
-            customAdapter = new CustomAdapter(getActivity(), myList, this);
+            customAdapter = new CustomAdapter(getActivity(), myList);
             listView.setAdapter(customAdapter);
             setCustomAdapterListner();
         }
@@ -436,6 +443,14 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
 
     public void onClickMethod() {
 
+        // Method for Appointment
+        checkOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
         listView.setOnTouchListener(new ListView.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -493,11 +508,16 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
                 ArrayList<KADate> daysT = weekViews.get(count).getCurrentWeekDays();
 
                 // code modified by Magesh
-                selectedDay = daysT.get(position);
-                if (selectedDay.unique == weekAdapter.todayUniqueID) {
+                KADate selectedDay1 = daysT.get(position);
+
+                if (selectedDay1.unique < weekAdapter.todayUniqueID)
+                    return;//old days we dont have any click event
+                if (selectedDay1.unique == weekAdapter.todayUniqueID) {
                     checkCurrentDay = true;
                 } else
                     checkCurrentDay = false;
+
+                selectedDay=selectedDay1;
                 weekAdapter.selectedIndex = selectedDay.unique;
                 customAdapter.selectedIndex = 0;
                 loadAvailableTimes(checkCurrentDay, selectedDay.dayLongName);
@@ -657,14 +677,17 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
     }
     private void validateStaff(){
 
-        boolean isValid = true;
+        boolean isValid = false;
         for (int i=0;i<service_dboup.size();i++) {
             AddToCardServiceModel addToCardServiceModel = service_dboup.get(i);
             if(addToCardServiceModel.staffname==null|| addToCardServiceModel.staffname.length()==0)
             {
                 isValid=false;
+
                 break;
             }
+            if(i==service_dboup.size()-1)
+                isValid=true;
 
         }
 
@@ -678,7 +701,7 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
         {
             //0097DB
             checkOutButton.setBackgroundColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorGrey));
-            checkOutButton.setEnabled(true);
+            checkOutButton.setEnabled(false);
         }
 
 
@@ -688,8 +711,11 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
     ArrayList arrEmployes ;
     private  void getStaffDetails()
     {
-        for(int i=0;i<arrEmpIds.size();i++) {
-            String empID = (String)arrEmpIds.get(i);
+
+
+        for(int i=0;i<service_dboup.size();i++) {
+            AddToCardServiceModel addToCardServiceModel = service_dboup.get(i);
+            String empID =  addToCardServiceModel.getServiceId2();
             String url = Constant.HOST + "api/v1/service/"+empID+"/employees";
 
             RequestFuture<JSONArray> future = RequestFuture.newFuture();
@@ -711,8 +737,8 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
 
 
 
-                int em=0;
-               // for (int em=0;em<arrResponse.length();em++)
+
+                for (int em=0;em<arrResponse.length();em++)
                 {
                     try {
 
@@ -727,18 +753,22 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
                         objStaff.businesName = SafeParser.getString(dictStaf, "business_name", "");
                         objStaff.business = SafeParser.getString(dictStaf, "business", "");
 
-                        if (dictStaf.has("profile_image")) {
-                            JSONObject dictProfileImg = dictStaf.getJSONObject("profile_image");
-                            if (dictProfileImg != null) {
-                                objStaff.imgUrlNormal = SafeParser.getString(dictStaf, "thumb", "");
-                                objStaff.imgUrlThumb = SafeParser.getString(dictStaf, "medium", "");
-                                objStaff.imgUrlMedium = SafeParser.getString(dictStaf, "url", "");
+                        try {
+                            if (dictStaf.has("profile_image") && dictStaf.get("profile_image") instanceof JSONObject && dictStaf.getJSONObject("profile_image") != null) {
+
+                                JSONObject dictProfileImg = dictStaf.getJSONObject("profile_image");
+                                if (dictProfileImg != null) {
+                                    objStaff.imgUrlNormal = SafeParser.getString(dictStaf, "thumb", "");
+                                    objStaff.imgUrlThumb = SafeParser.getString(dictStaf, "medium", "");
+                                    objStaff.imgUrlMedium = SafeParser.getString(dictStaf, "url", "");
+                                }
                             }
+
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
                         }
                         arrEmployes.add(objStaff);
-                    }
-                    catch (Exception ex)
-                    {
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
@@ -759,6 +789,7 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
 
             @Override
             protected String doInBackground(Void... params) {
+
                 getAvailableEmployIds(datestr);
 
                 if(arrEmployes==null)
@@ -796,6 +827,7 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
 
     public int REQUEST_TIMEOUT =30;
     ArrayList arrEmpIds = new ArrayList();
+    ArrayList arrMissEmpIds = new ArrayList();
     private  void getAvailableEmployIds(String datestr)
     {
        // showpDialog();
@@ -847,15 +879,16 @@ public class CheckoutFragment extends Fragment implements CustomAdapter.OnItemCl
             JSONArray arrResponse = future.get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
             if (arrResponse != null) {
 
-                arrEmpIds.clear();
+                arrMissEmpIds.clear();
 
                 for (int i = 0; i < arrResponse.length(); i++) {
 
                     JSONObject dictEmp = arrResponse.getJSONObject(i);
                     String empID = SafeParser.getString(dictEmp, "employee", "");
                     if (empID != null && empID.length() > 0) {
-                        if(arrEmpIds.indexOf(empID)<=0)
-                            arrEmpIds.add(empID);
+                        int index = arrEmpIds.indexOf(empID);
+                        if(arrMissEmpIds.indexOf(empID)==-1)
+                            arrMissEmpIds.add(empID);
                     }
                 }
 

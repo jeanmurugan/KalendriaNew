@@ -132,9 +132,14 @@ public class DashBoardFragment extends Fragment {
         list.addFooterView(footerView);
 
         try {
+            makeJsonObjectRequest();
+            /*
             //if(responceReseultFromServerSingletone.size()==0)
-
+            {
                 makeJsonObjectRequest();
+            }else{
+
+            }*/
 
         } catch (Exception e) {
             e.printStackTrace();

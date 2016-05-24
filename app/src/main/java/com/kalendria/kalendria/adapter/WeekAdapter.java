@@ -80,10 +80,10 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.WeekViewHolder
             holder.days.setBackgroundResource(R.drawable.button_circle_white);
             holder.days.setTextColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorSkyBlue));
         }
-        else
+        else if(dateObject.unique<todayUniqueID)
         {
             holder.days.setBackgroundResource(R.drawable.button_circle_grey);
-            holder.days.setTextColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorSkyBlue));
+            holder.days.setTextColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorBlack));
         }
 
         /*

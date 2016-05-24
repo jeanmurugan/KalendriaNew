@@ -10,6 +10,6 @@
     <color name="colorSkyBlue">#16b5ff</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorCheckout">#0097DB</color>
-
+    <color name="colorBlack">#000000</color>
 
 </resources>

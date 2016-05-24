@@ -20,7 +20,7 @@ import java.util.ArrayList;
 /**
  * Created by chandirabalan on 5/11/2016.
  */
-public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
+public class CustomAdapter extends BaseAdapter  {
 
     Context context;
     ArrayList<TimeBean> mylist ;
@@ -28,12 +28,12 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
     OnItemClickListener mItemClickListener;
 
     public int selectedIndex;
-    public CustomAdapter(Context context, ArrayList<TimeBean> mylist,OnItemClickListener listner) {
+    public CustomAdapter(Context context, ArrayList<TimeBean> mylist) {
         this.context = context;
         this.mylist = mylist;
         inflater = (LayoutInflater.from(context));
         selectedIndex=0;
-        mItemClickListener = (OnItemClickListener)listner;
+
     }
     public void changeDatasource( ArrayList<TimeBean> mylist)
     {
@@ -83,8 +83,9 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
         final int position = i;
 
-        mViewHolder.tvTitle.setOnClickListener(this);
+        //mViewHolder.tvTitle.setOnClickListener(this);
         mViewHolder.tvTitle.setTag(""+i);
+
         mViewHolder.tvTitle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -97,17 +98,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
     }
 
-    @Override
-    public void onClick(View        v) {
-        if (mItemClickListener != null) {
 
-            String tag = (String)v.getTag();
-            int position =  Integer.parseInt(tag);
-            TimeBean currentTime = getItem(position);
-            mItemClickListener.onItemClick(currentTime,position);
-            //mItemClickListener.onItemClick(v, getPosition());
-        }
-    }
     public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.mItemClickListener = mItemClickListener;
     }
