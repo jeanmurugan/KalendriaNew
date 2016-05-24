@@ -966,7 +966,6 @@ public class ProfileFragments extends Fragment {
 
         try {
 
-
             parentData.put("phone",phone);
             parentData.put("type","customer");
             parentData.put("total_bookings","0");
@@ -976,10 +975,10 @@ public class ProfileFragments extends Fragment {
             parentData.put("first_name",username);
             parentData.put("last_name",lastName);
             parentData.put("address",address);
-            parentData.put("createdAt","");
+           // parentData.put("createdAt","");
             parentData.put("send_marketing_email",true);
             parentData.put("role","3");
-            parentData.put("lastBookingAt","");
+           // parentData.put("lastBookingAt","");
 
             parentData.put("points",0);
             parentData.put("credit",0.0);
@@ -998,7 +997,7 @@ public class ProfileFragments extends Fragment {
             parentData.put("isDeleted","");
             parentData.put("isVerifiedEmailSent","");
             parentData.put("last_login","");
-            parentData.put("updatedAt","");
+           // parentData.put("updatedAt","");
             parentData.put("reminderCount",0);
             parentData.put("verifyToken","");
             parentData.put("like_count",0);

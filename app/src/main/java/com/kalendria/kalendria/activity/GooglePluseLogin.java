@@ -249,8 +249,7 @@ public class GooglePluseLogin extends Activity implements GoogleApiClient.OnConn
         int gender = currentPerson.getGender();
 
        // String personPhotoUrl = currentPerson.getImage().getUrl();
-
-
+        System.out.println("g+"+id+email+personName+nikeName+gender);
 
     }
 

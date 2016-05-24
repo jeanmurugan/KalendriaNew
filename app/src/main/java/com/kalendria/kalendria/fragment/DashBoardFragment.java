@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -118,6 +119,8 @@ public class DashBoardFragment extends Fragment {
         pDialog.setCancelable(false);
         sharedPref = getActivity().getSharedPreferences(Constant.MyPREFERENCES, 0);
 
+        String date = (DateFormat.format("yyyy-MM-dd hh:mm:ss", new java.util.Date()).toString());
+        System.out.println("data&time-->"+date);
         viewPager = (ViewPager) rootView.findViewById(R.id.pager);
 
         textView = (AutoCompleteTextView) rootView.findViewById(R.id.searchBox);
@@ -131,6 +134,8 @@ public class DashBoardFragment extends Fragment {
         try {
             if(responceReseultFromServerSingletone.size()==0){
                 makeJsonObjectRequest();
+            }else{
+
             }
 
         } catch (Exception e) {
@@ -157,6 +162,14 @@ public class DashBoardFragment extends Fragment {
         }, 5000, 5000);
 
 
+        onclickButton();
+
+
+        return rootView;
+    }
+
+
+    public void onclickButton(){
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -309,11 +322,7 @@ public class DashBoardFragment extends Fragment {
             }
         });
         // Inflate the layout for this fragment
-
-
-        return rootView;
     }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
