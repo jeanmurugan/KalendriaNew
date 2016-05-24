@@ -254,10 +254,12 @@ public class VenueAdapter extends BaseAdapter {
 
                 AddToCardServiceModel addToCardServiceModel=new AddToCardServiceModel();
                 addToCardServiceModel.setServiceId(_data.get(positionBtn).getName_service_id());
+                addToCardServiceModel.setServiceId2(_data.get(positionBtn).getId());
                 addToCardServiceModel.setServiceName(_data.get(positionBtn).getName_service());
                 addToCardServiceModel.setServicePrice(_data.get(positionBtn).getPrice());
                 addToCardServiceModel.setServiceDiscount(_data.get(positionBtn).getDiscount());
                 addToCardServiceModel.setServiceDuration(_data.get(positionBtn).getDuration());
+                addToCardServiceModel.calculateDiscountAmount();
                 if(!flag){
                     addToCardVenueModel.setVenueID(_data.get(positionBtn).getId());
                     addToCardVenueModel.setVenueName(_data.get(positionBtn).getName());

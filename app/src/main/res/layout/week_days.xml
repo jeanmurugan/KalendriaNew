@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             android:divider="@android:color/transparent"
             android:dividerHeight="2dp"
-            android:scrollbars="none"></com.kalendria.kalendria.utility.NonScrollListView>
+            android:descendantFocusability="blocksDescendants"
+            android:scrollbars="none" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -97,10 +98,10 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/cehckout_btn"
+            android:id="@+id/checkout_btn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30sdp"
-            android:background="@android:color/black"
+            android:background="@color/colorSkyBlue"
             android:text="PROCEED TO CHECKOUT"
             android:textColor="@android:color/white" />
 

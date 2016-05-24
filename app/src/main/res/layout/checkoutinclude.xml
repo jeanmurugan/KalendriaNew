@@ -2,7 +2,7 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@color/colorGrey"
     android:shrinkColumns="*"
     android:stretchColumns="*">
 
@@ -11,39 +11,45 @@
     <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/service_nameLable"
             android:layout_width="@dimen/_100sdp"
-            android:height="@dimen/_37sdp"
+            android:height="@dimen/_35sdp"
             android:gravity="left|center_horizontal"
             android:layout_marginLeft="@dimen/_2sdp"
             android:text="Hair Bleaching chin"
+
             android:textColor="#000000" />
+
 
         <TextView
             android:id="@+id/service_duration"
-            android:height="@dimen/_35sdp"
+            android:height="@dimen/_25sdp"
             android:background="#CDEAF8"
             android:gravity="center"
             android:text=""
+            android:layout_marginTop="5dp"
             android:textColor="#000000" />
 
         <TextView
             android:id="@+id/service_price"
             android:background="#7FCBED"
             android:gravity="center"
-            android:height="@dimen/_35sdp"
+            android:height="@dimen/_25sdp"
             android:text=""
+            android:layout_marginTop="5dp"
             android:textColor="#000000" />
 
         <TextView
             android:id="@+id/service_deiscount"
-            android:height="@dimen/_35sdp"
+            android:height="@dimen/_25sdp"
             android:background="#0098DC"
             android:gravity="center"
             android:text=""
+            android:layout_marginTop="5dp"
             android:textColor="#000000" />
 
 
@@ -54,6 +60,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_5sdp"
+        android:background="@color/colorGrey"
         android:gravity="center_horizontal">
 
         <TextView
@@ -67,28 +74,32 @@
         <TextView
             android:id="@+id/service_date"
             android:layout_weight="1"
-            android:background="#CDEAF8"
+            android:background="@color/colorLightGreen"
             android:gravity="center"
-            android:padding="10dip"
-            android:text=""
-            android:textColor="#000000" />
+
+            android:height="@dimen/_25sdp"
+            android:text="00:00"
+            android:textColor="@color/colorWhite" />
 
 
         <TextView
             android:id="@+id/service_time"
             android:layout_weight="1"
-            android:background="#0098DC"
+            android:background="@color/colorLightGreen"
             android:gravity="center"
-            android:padding="10dip"
+            android:layout_marginLeft="@dimen/_2sdp"
+            android:height="@dimen/_25sdp"
             android:text=""
-            android:textColor="#000000" />
+            android:textColor="@color/colorWhite" />
     </TableRow>
 
 
     <!-- Row 3 with 2 columns -->
     <TableRow
+        android:id="@+id/staffrow"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorGrey"
         android:gravity="center_horizontal">
 
         <TextView

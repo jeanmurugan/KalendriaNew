@@ -14,6 +14,7 @@ public class Constant {
     public static final String MyPREFERENCES ="KALENDRIA";
 
  public final static String HOST ="https://dev.api.kalendria.com/";
+
    //public final static String HOST ="https://api.kalendria.com/";
 
     public final static String LOGIN_URL = HOST+"api/v1/auth/local";

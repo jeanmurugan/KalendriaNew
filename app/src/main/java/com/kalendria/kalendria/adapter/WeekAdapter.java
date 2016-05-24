@@ -9,28 +9,49 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kalendria.kalendria.R;
+import com.kalendria.kalendria.model.KADate;
+import com.kalendria.kalendria.utility.KalendriaAppController;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by mansoor on 02/05/16.
  */
 public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.WeekViewHolder> {
     Context ctx;
-    ArrayList<String> dataValue;
+    ArrayList<KADate> dataValue;
     ArrayList<String> dataname;
 
-    int indexvalue = 0;
+    public int todayUniqueID = 0;
+   public int selectedIndex =-1;
 
     OnItemClickListener mItemClickListener;
 
-    public WeekAdapter(Context context, ArrayList<String> data, ArrayList<String> data1,int indexvalue1) {
+    public WeekAdapter(Context context, ArrayList<KADate> data, ArrayList<String> data1,int indexvalue1) {
         ctx = context;
         dataValue = data;
         dataname = data1;
-        indexvalue = indexvalue1;
+
+
+        Calendar calender = Calendar.getInstance(Locale.US);
+        int day = calender.get(Calendar.DAY_OF_MONTH);
+        int month = calender.get(Calendar.MONTH)+1;// becoz it start from 0
+        int year = calender.get(Calendar.YEAR);
+
+        todayUniqueID = day*1000000+month*10000+year;
+        selectedIndex=todayUniqueID;
     }
 
+    public void refreshDates(Context context, ArrayList<KADate> data, ArrayList<String> data1,int indexvalue1)
+{
+    ctx = context;
+    dataValue = data;
+    dataname = data1;
+   // indexvalue = indexvalue1;
+   // selectedIndex=indexvalue1;
+}
     @Override
     public WeekViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -45,16 +66,35 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.WeekViewHolder
       /*  int index = days.indexOf(weekViews.get(0).getCurrentDay());
         System.out.println("Current position :  " + index);*/
 
-        holder.days.setText(dataValue.get(position));
+        KADate dateObject = dataValue.get(position);
+        holder.days.setText(""+dateObject.day);
         holder.daysname.setText(dataname.get(position));
 
+        if(selectedIndex==dateObject.unique)
+        {
+            holder.days.setBackgroundResource(R.drawable.button_circle);
+            holder.days.setTextColor(Color.WHITE);
+        }
+        else if(todayUniqueID==dateObject.unique && selectedIndex!=position)
+        {
+            holder.days.setBackgroundResource(R.drawable.button_circle_white);
+            holder.days.setTextColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorSkyBlue));
+        }
+        else
+        {
+            holder.days.setBackgroundResource(R.drawable.button_circle_grey);
+            holder.days.setTextColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorSkyBlue));
+        }
+
+        /*
         if(position == indexvalue){
             holder.days.setBackgroundResource(R.drawable.button_circle);
             holder.days.setTextColor(Color.WHITE);
-        }/*else {
+        }else  if(selectedIndex==position && position != indexvalue) {
             holder.days.setBackgroundResource(R.drawable.button_circle);
             holder.days.setTextColor(Color.WHITE);
-        }*/
+        }
+        */
     }
 
     @Override

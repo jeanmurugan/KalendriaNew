@@ -11,6 +11,16 @@ public class VenueItemServiceChild {
     private   String price;
     private   String duration;
     private   String discount;
+    public int discountAmount;
+    public int remainAmount;
+
+    //code modified by magesh
+    public String serviceID;
+    public String getserviceID() {
+        return serviceID;
+    }
+    public void  setServiceID(String serviceID) { this.serviceID=serviceID;}
+
 
 
     // Venue Details
@@ -70,7 +80,11 @@ public class VenueItemServiceChild {
     }
 
     public String getDuration() {
-        return duration;
+        if (duration!=null && !duration.equalsIgnoreCase("null")) {
+            return duration;
+        }
+
+        return "";
     }
 
     public void setDuration(String duration) {
@@ -100,4 +114,61 @@ public class VenueItemServiceChild {
     public void setId(String id) {
         this.id = id;
     }
+
+    public void calculateDiscountAmount()
+    {
+
+        String price = this.getPrice();
+        String dis = this.getDiscount();
+
+        int priceAmt = 0;
+        int dictAmt = 0;
+
+        if(price != null && !price.equalsIgnoreCase("0") &&  !price.equalsIgnoreCase("null")){
+            try {
+                priceAmt = Integer.parseInt(price);
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+
+        if(dis != null && !dis.equalsIgnoreCase("null")  && !dis.equalsIgnoreCase("0")){
+            try {
+                dictAmt = Integer.parseInt(dis);
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+
+        Double  priceAmt2f =Double.parseDouble(priceAmt+"");
+        Double pricef = (Double)100.0;
+
+        Double calAmt1 = priceAmt2f/ pricef;
+        Double calAmt = calAmt1 * dictAmt;
+
+        this.discountAmount = calAmt.intValue();
+        this.remainAmount = 0;
+
+        this.remainAmount = priceAmt - discountAmount;
+
+    }
+
+    public String getStrikeOutAmount()
+    {
+        if(discountAmount != 0){
+            return   this.getPrice() + " " + "AED";
+        }
+
+        return  "";
+    }
+
+    public String getOriginalPrices()
+    {
+        return  remainAmount + " " + "AED";
+    }
+
 }

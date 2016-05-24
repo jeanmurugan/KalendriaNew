@@ -25,6 +25,7 @@ import com.kalendria.kalendria.model.AddToCardServiceModel;
 import com.kalendria.kalendria.model.AddToCardVenueModel;
 import com.kalendria.kalendria.model.DeshBoardViewPageModel;
 import com.kalendria.kalendria.singleton.AddToCardSingleTone;
+import com.kalendria.kalendria.utility.KalendriaAppController;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -169,6 +170,9 @@ which is totally wrong
     public void initDialog() {
 
 	/*set the tag for book now button */
+        if(context==null)
+            context= KalendriaAppController.getInstance().getApplicationContext();
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflateralert = LayoutInflater.from(context);
         alertView = inflateralert.inflate(R.layout.booknow, null);
@@ -246,6 +250,7 @@ which is totally wrong
                 addToCardServiceModel.setServicePrice(imagesList.get(positionBtn).getServicePrice());
                 addToCardServiceModel.setServiceDiscount(imagesList.get(positionBtn).getServiceDiscount());
                 addToCardServiceModel.setServiceDuration(imagesList.get(positionBtn).getServiceDuration());
+                addToCardServiceModel.setServiceId2(imagesList.get(positionBtn).getServiceId());
 
                 if (!flag) {
                     addToCardVenueModel.setVenueID(imagesList.get(positionBtn).getVenueID());

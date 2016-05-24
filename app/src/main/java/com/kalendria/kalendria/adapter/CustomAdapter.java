@@ -1,30 +1,43 @@
 package com.kalendria.kalendria.adapter;
 
 import android.content.Context;
+import android.security.KeyChainAliasCallback;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.TokenData;
 import com.kalendria.kalendria.R;
+import com.kalendria.kalendria.fragment.CheckoutFragment;
 import com.kalendria.kalendria.model.TimeBean;
+import com.kalendria.kalendria.utility.KalendriaAppController;
 
 import java.util.ArrayList;
 
 /**
  * Created by chandirabalan on 5/11/2016.
  */
-public class CustomAdapter extends BaseAdapter {
+public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
     Context context;
-    ArrayList<TimeBean> mylist = new ArrayList<TimeBean>();
+    ArrayList<TimeBean> mylist ;
     LayoutInflater inflater;
+    OnItemClickListener mItemClickListener;
 
-    public CustomAdapter(Context context, ArrayList<TimeBean> mylist) {
+    public int selectedIndex;
+    public CustomAdapter(Context context, ArrayList<TimeBean> mylist,OnItemClickListener listner) {
         this.context = context;
         this.mylist = mylist;
         inflater = (LayoutInflater.from(context));
+        selectedIndex=0;
+        mItemClickListener = (OnItemClickListener)listner;
+    }
+    public void changeDatasource( ArrayList<TimeBean> mylist)
+    {
+        this.mylist=mylist;
     }
 
     @Override
@@ -55,12 +68,52 @@ public class CustomAdapter extends BaseAdapter {
             mViewHolder = (MyViewHolder) view.getTag();
         }
 
-        TimeBean currentListData = getItem(i);
+       final TimeBean currentListData = getItem(i);
 
         mViewHolder.tvTitle.setText(currentListData.getCal_time());
 
+        if(selectedIndex==i)
+        {
+            view.setBackgroundColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorSkyBlue));
+        }
+        else
+        {
+            view.setBackgroundColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorWhite));
+        }
+
+        final int position = i;
+
+        mViewHolder.tvTitle.setOnClickListener(this);
+        mViewHolder.tvTitle.setTag(""+i);
+        mViewHolder.tvTitle.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
+
         return view;
 
+    }
+
+    @Override
+    public void onClick(View        v) {
+        if (mItemClickListener != null) {
+
+            String tag = (String)v.getTag();
+            int position =  Integer.parseInt(tag);
+            TimeBean currentTime = getItem(position);
+            mItemClickListener.onItemClick(currentTime,position);
+            //mItemClickListener.onItemClick(v, getPosition());
+        }
+    }
+    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        public void onItemClick(TimeBean currentListData, int position);
     }
 
     private class MyViewHolder {

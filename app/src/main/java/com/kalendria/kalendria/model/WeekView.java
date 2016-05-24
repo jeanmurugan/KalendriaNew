@@ -1,11 +1,13 @@
 package com.kalendria.kalendria.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by mansoor on 02/05/16.
  */
 public class WeekView {
     public int currentWeek;
-    public String[] currentWeekDays;
+    public ArrayList<KADate> currentWeekDays;
     public String currentMonth;
     public String currentYear;
     public String currentDay;
@@ -19,11 +21,11 @@ public class WeekView {
         this.currentWeek = currentWeek;
     }
 
-    public String[] getCurrentWeekDays() {
+    public ArrayList<KADate> getCurrentWeekDays() {
         return currentWeekDays;
     }
 
-    public void setCurrentWeekDays(String[] currentWeekDays) {
+    public void setCurrentWeekDays(ArrayList<KADate> currentWeekDays) {
         this.currentWeekDays = currentWeekDays;
     }
 

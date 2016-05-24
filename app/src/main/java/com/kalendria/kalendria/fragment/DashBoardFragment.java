@@ -129,7 +129,8 @@ public class DashBoardFragment extends Fragment {
         list.addFooterView(footerView);
 
         try {
-            if(responceReseultFromServerSingletone.size()==0){
+            //if(responceReseultFromServerSingletone.size()==0)
+            {
                 makeJsonObjectRequest();
             }
 
@@ -382,7 +383,7 @@ public class DashBoardFragment extends Fragment {
                             serviceList.add(deshBoardViewPageModel);
                         }
 
-                        adapter = new DeshBoardViewPagerAdapter(getActivity(), serviceList);
+                                                      adapter = new DeshBoardViewPagerAdapter(getActivity(), serviceList);
                         viewPager.setAdapter(adapter);
                         currentPage = viewPager.getCurrentItem();
                         NUM_PAGES = serviceList.size();
@@ -499,10 +500,12 @@ public class DashBoardFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                VolleyLog.d(Tag, "Error: " + error.getMessage());
-                //coded by Magesh : need to check null because on timeout we get null
-                if(error!=null && error.getMessage()!=null)
-                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                String message = error.getMessage();
+                if (error != null && message != null) {
+                    VolleyLog.d(Tag, "Error: " + message);
+                    //coded by Magesh : need to check null because on timeout we get null
+                    Toast.makeText(KalendriaAppController.getInstance(), message, Toast.LENGTH_SHORT).show();
+                }
 
                 // hide the progress dialog
                 hidepDialog();

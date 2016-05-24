@@ -44,6 +44,7 @@ public class VeneuItemsServiceAdapter extends BaseExpandableListAdapter {
     public VeneuItemsServiceAdapter(Context context, ArrayList<VeneuItemServiceHeader> expListItems) {
         this.context = context;
         this.groups = expListItems;
+        initGUI();
     }
 
     @Override
@@ -63,24 +64,7 @@ public class VeneuItemsServiceAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
 
-        // alertdialog start
-        /*set the tag for book now button */
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        LayoutInflater inflateralert = LayoutInflater.from(context);
-        alertView = inflateralert.inflate(R.layout.booknow, null);
-        builder.setView(alertView);
 
-
-        home_venu_name_txt_add = (TextView) alertView.findViewById(R.id.home_venu_name_txt_add);
-        home_service_name_txt = (TextView) alertView.findViewById(R.id.home_service_name_txt);
-        home_service_price_txt = (TextView) alertView.findViewById(R.id.home_service_price_txt);
-        home_service_duration_txt = (TextView) alertView.findViewById(R.id.home_service_duration_txt);
-        addtocart_txt = (TextView) alertView.findViewById(R.id.addtocart_txt);
-        cross_image = (Button) alertView.findViewById(R.id.cross_image_addto_card);
-        home_service_book_btn = (Button) alertView.findViewById(R.id.home_service_book_btn);
-
-        builder.setCancelable(true);
-        myDialog = builder.create();
 
 
         TextView service_child, service_duration, service_discount, service_price;
@@ -97,10 +81,15 @@ public class VeneuItemsServiceAdapter extends BaseExpandableListAdapter {
         service_price = (TextView) convertView.findViewById(R.id.service_price);
 
         service_child.setText(child.getName());
+        service_duration.setText(child.getDuration());
 
-        if (!child.getDuration().equalsIgnoreCase("null")) {
-            service_duration.setText(child.getDuration());
-        }
+
+        service_discount.setText(child.getStrikeOutAmount());
+
+        service_discount.setPaintFlags(service_discount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        service_price.setText(child.getOriginalPrices());
+
+        /* code modified by magesh
         if (!child.getPrice().equalsIgnoreCase("null") && !child.getPrice().equalsIgnoreCase("0")) {
             service_discount.setText(child.getPrice() + "AED");
             service_discount.setPaintFlags(service_discount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -108,7 +97,7 @@ public class VeneuItemsServiceAdapter extends BaseExpandableListAdapter {
         if (!child.getDiscount().equalsIgnoreCase("null") && !child.getDiscount().equalsIgnoreCase("0")) {
 
             service_price.setText(child.getDiscount() + "AED");
-        }
+        }*/
 
 
         service_price.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +110,7 @@ public class VeneuItemsServiceAdapter extends BaseExpandableListAdapter {
                 home_service_duration_txt.setText(child.getDuration());
                 myDialog.show();
 
-/*vasanth you this for closing popup*/
+
                 cross_image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -141,7 +130,7 @@ public class VeneuItemsServiceAdapter extends BaseExpandableListAdapter {
                 addtocart_txt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //Toast.makeText(context, "card addted successfully ", Toast.LENGTH_SHORT).show();
+
                         System.out.println("potionID card-->" + "" + positionBtn);
 
                         addToCardSingletone = AddToCardSingleTone.getInstance().getParamList();
@@ -175,6 +164,8 @@ public class VeneuItemsServiceAdapter extends BaseExpandableListAdapter {
                         addToCardServiceModel.setServicePrice(child.getPrice());
                         addToCardServiceModel.setServiceDiscount(child.getDiscount());
                         addToCardServiceModel.setServiceDuration(child.getDuration());
+                        addToCardServiceModel.calculateDiscountAmount();
+                        addToCardServiceModel.setServiceId2(child.getserviceID());
 
                         if (!flag) {
                             addToCardVenueModel.setVenueID(child.getVenueid());
@@ -183,6 +174,7 @@ public class VeneuItemsServiceAdapter extends BaseExpandableListAdapter {
                             addToCardVenueModel.setVenuImagethumb(child.getVenueImage());
                             addToCardVenueModel.setCity(child.getVenuecity());
                             addToCardVenueModel.setRegion(child.getVeneregiion());
+
 
                             items.add(addToCardServiceModel);
                             addToCardVenueModel.setItems(items);
@@ -196,18 +188,20 @@ public class VeneuItemsServiceAdapter extends BaseExpandableListAdapter {
                                 addToCardSingletone.set(location, addToCardVenueModel);
                             } else {
                                 Toast.makeText(context, "This service have been already added in the cart", Toast.LENGTH_SHORT).show();
-                                myDialog.cancel();
+                               // myDialog.dismiss();
                             }
 
                         }
 
-
+                        myDialog.dismiss();
                         if (addToCardSingletone.size() <= 9) {
                             String sizeofcard = " " + addToCardSingletone.size();
                             ((VenueItem) context).dispatchInformations(sizeofcard);
                         } else {
                             ((VenueItem) context).dispatchInformations(String.valueOf(addToCardSingletone.size()));
                         }
+                        Toast.makeText(context, "card addted successfully ", Toast.LENGTH_SHORT).show();
+
                 /*System.out.println("v--->"+""+	addToCardSingletone.size());
 				for (AddToCardVenueModel addToCardVenueModel1:addToCardSingletone) {
 					System.out.println("venueID--->"+""+	addToCardVenueModel1.getVenueID());
@@ -241,6 +235,27 @@ public class VeneuItemsServiceAdapter extends BaseExpandableListAdapter {
 
     }
 
+    public void initGUI()
+    {
+        // alertdialog start
+        /*set the tag for book now button */
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflateralert = LayoutInflater.from(context);
+        alertView = inflateralert.inflate(R.layout.booknow, null);
+        builder.setView(alertView);
+
+
+        home_venu_name_txt_add = (TextView) alertView.findViewById(R.id.home_venu_name_txt_add);
+        home_service_name_txt = (TextView) alertView.findViewById(R.id.home_service_name_txt);
+        home_service_price_txt = (TextView) alertView.findViewById(R.id.home_service_price_txt);
+        home_service_duration_txt = (TextView) alertView.findViewById(R.id.home_service_duration_txt);
+        addtocart_txt = (TextView) alertView.findViewById(R.id.addtocart_txt);
+        cross_image = (Button) alertView.findViewById(R.id.cross_image_addto_card);
+        home_service_book_btn = (Button) alertView.findViewById(R.id.home_service_book_btn);
+
+        builder.setCancelable(true);
+        myDialog = builder.create();
+    }
     @Override
     public int getChildrenCount(int groupPosition) {
         ArrayList<VenueItemServiceChild> chList = groups.get(groupPosition).getItems();

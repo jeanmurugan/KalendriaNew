@@ -842,6 +842,7 @@ public class VenueItemFragment extends Fragment {
                                         ch.setDuration(obj.getString("duration"));
                                         ch.setDiscount(obj.getString("discount"));
                                         ch.setPrice(obj.getString("price"));
+                                        ch.setServiceID(obj.getString("id"));
 
                                         // set venue detail with every child vealus
 
@@ -850,6 +851,7 @@ public class VenueItemFragment extends Fragment {
                                         ch.setVenueImage(Constant.getVenuSelecedImageUrl(getActivity()));
                                         ch.setVenuecity(city_name.getText().toString());
                                         ch.setVeneregiion(relign_name.getText().toString());
+                                        ch.calculateDiscountAmount();
                                         ch_list.add(ch);
 
                                     }

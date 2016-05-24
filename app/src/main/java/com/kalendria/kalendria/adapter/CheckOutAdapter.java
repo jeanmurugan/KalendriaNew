@@ -10,12 +10,14 @@ import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by mansoor on 11/03/16.
@@ -38,15 +41,20 @@ public class CheckOutAdapter extends BaseAdapter {
 
     public List<AddToCardServiceModel> _data;
     private ArrayList<AddToCardServiceModel> arraylist;
+    CheckOutAdapterDelegate delegate;
     Context _c;
     ViewHolder v;
+    public interface CheckOutAdapterDelegate
+    {
+        public void onShowStaffPicker(int position,AddToCardServiceModel data);
+    }
 
-
-    public CheckOutAdapter(List<AddToCardServiceModel> selectUsers, Context context) {
+    public CheckOutAdapter(List<AddToCardServiceModel> selectUsers, Context context,CheckOutAdapterDelegate delegate) {
         _data = selectUsers;
         _c = context;
         this.arraylist = new ArrayList<AddToCardServiceModel>();
         this.arraylist.addAll(_data);
+            this.delegate=delegate;
         System.out.println("i am from selected adapter page" + _data.size());
         //Toast.makeText(_c, "hi", Toast.LENGTH_LONG).show();
     }
@@ -89,15 +97,30 @@ public class CheckOutAdapter extends BaseAdapter {
         v.service_date = (TextView) view.findViewById(R.id.service_date);
         v.service_time = (TextView) view.findViewById(R.id.service_time);
         v.staffName = (TextView) view.findViewById(R.id.staffName);
+        v.staffRow = (TableRow)view.findViewById(R.id.staffrow);
 
         final AddToCardServiceModel data = (AddToCardServiceModel) _data.get(i);
         v.service_nameLable.setText(data.getServiceName());
         v.service_duration.setText(data.getServiceDuration());
-        if(!data.getServiceDiscount().equalsIgnoreCase("0")){
-            v.service_price.setText(data.getServiceDiscount());
-        }
-        v.service_deiscount.setText(data.getServicePrice()+"AED");
 
+        v.service_date.setText(data.selectedDate);
+        v.service_time.setText(data.selectedTime);
+
+        v.service_price.setPaintFlags(v.service_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+         v.service_price.setText(data.getStrikeOutAmount());
+
+        v.service_deiscount.setText(data.getOriginalPrices());
+
+        v.staffName.setText(data.getstaffname());
+
+         final int pos = i;
+        v.staffRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                delegate.onShowStaffPicker(pos,data);
+            }
+        });
       /*  if( data.getImageUrl() != null && !"".equals(data.getImageUrl()) ){
             try {
                 Picasso.with(_c)
@@ -141,6 +164,7 @@ public class CheckOutAdapter extends BaseAdapter {
 
         TextView service_nameLable, service_duration, service_price, service_deiscount, service_date, service_time, staffName;
         ImageView imageView;
+        TableRow staffRow;
 
 
     }

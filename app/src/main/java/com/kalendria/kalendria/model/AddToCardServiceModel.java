@@ -14,6 +14,23 @@ public class AddToCardServiceModel {
     private  String servicePoints;
     private  String serviceImage;
 
+    public  boolean isOpen;
+
+    public int discountAmount;
+    public int remainAmount;
+    private  String serviceId2;
+
+    public   String selectedDate;
+    public  String selectedTime;
+    public  String staffname;
+    public  String staffID;
+
+
+    public String getstaffname() {
+        if(staffname==null) return "";
+        return staffname;
+    }
+
     public String getServiceId() {
         return serviceId;
     }
@@ -21,6 +38,15 @@ public class AddToCardServiceModel {
     public void setServiceId(String serviceId) {
         this.serviceId = serviceId;
     }
+
+    public String getServiceId2() {
+        return serviceId2;
+    }
+
+    public void setServiceId2(String serviceId2) {
+        this.serviceId2 = serviceId2;
+    }
+
 
     public String getServiceName() {
         return serviceName;
@@ -142,4 +168,61 @@ public class AddToCardServiceModel {
     public void setRegion(String region) {
         this.region = region;
     }
+
+    public void calculateDiscountAmount()
+    {
+
+        String price = this.getServicePrice();
+        String dis = this.getServiceDiscount();
+
+        int priceAmt = 0;
+        int dictAmt = 0;
+
+        if(price != null && !price.equalsIgnoreCase("0")){
+            try {
+                priceAmt = Integer.parseInt(price);
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+
+        if(dis != null && !dis.equalsIgnoreCase("0")){
+            try {
+                dictAmt = Integer.parseInt(dis);
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+
+        Double  priceAmt2f =Double.parseDouble(priceAmt+"");
+        Double pricef = (Double)100.0;
+
+        Double calAmt1 = priceAmt2f/ pricef;
+        Double calAmt = calAmt1 * dictAmt;
+
+        this.discountAmount = calAmt.intValue();
+        this.remainAmount = 0;
+
+        this.remainAmount = priceAmt - discountAmount;
+
+           }
+
+    public String getStrikeOutAmount()
+    {
+        if(discountAmount != 0){
+            return   this.getServicePrice() + " " + "AED";
+        }
+
+            return  "";
+    }
+
+    public String getOriginalPrices()
+    {
+        return  remainAmount + " " + "AED";
+    }
+
 }
