@@ -18,15 +18,18 @@ public class AddToCardServiceModel {
 
     public int discountAmount;
     public int remainAmount;
+    public boolean isValid;
     private  String serviceId2;
 
     public   String selectedDate;
     public  String selectedTime;
+
     public  String staffname;
     public  String staffID;
-
+    public  String staffthumbImage;
 
     public String getstaffname() {
+
         if(staffname==null) return "";
         return staffname;
     }
@@ -209,7 +212,7 @@ public class AddToCardServiceModel {
 
         this.remainAmount = priceAmt - discountAmount;
 
-           }
+    }
 
     public String getStrikeOutAmount()
     {
@@ -217,7 +220,7 @@ public class AddToCardServiceModel {
             return   this.getServicePrice() + " " + "AED";
         }
 
-            return  "";
+        return  "";
     }
 
     public String getOriginalPrices()

@@ -11,13 +11,12 @@
     <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/service_nameLable"
             android:layout_width="@dimen/_100sdp"
-            android:height="@dimen/_35sdp"
+            android:layout_height="wrap_content"
             android:gravity="left|center_horizontal"
             android:layout_marginLeft="@dimen/_2sdp"
             android:text="Hair Bleaching chin"
@@ -27,30 +26,36 @@
 
         <TextView
             android:id="@+id/service_duration"
-            android:height="@dimen/_25sdp"
+            android:height="@dimen/_20sdp"
+            android:layout_width="@dimen/_25sdp"
             android:background="#CDEAF8"
             android:gravity="center"
             android:text=""
+            android:textScaleX="0.8"
             android:layout_marginTop="5dp"
             android:textColor="#000000" />
 
         <TextView
             android:id="@+id/service_price"
             android:background="#7FCBED"
+            android:layout_width="@dimen/_25sdp"
             android:gravity="center"
-            android:height="@dimen/_25sdp"
+            android:height="@dimen/_20sdp"
             android:text=""
+            android:textScaleX="0.8"
             android:layout_marginTop="5dp"
             android:textColor="#000000" />
 
         <TextView
             android:id="@+id/service_deiscount"
-            android:height="@dimen/_25sdp"
+            android:height="@dimen/_20sdp"
+            android:layout_width="@dimen/_25sdp"
             android:background="#0098DC"
             android:gravity="center"
-            android:text=""
+            android:text="10"
+            android:textScaleX="0.8"
             android:layout_marginTop="5dp"
-            android:textColor="#000000" />
+            android:textColor="#FFFFFF" />
 
 
     </TableRow>
@@ -66,6 +71,7 @@
         <TextView
             android:id="@+id/servicedateLable"
             android:layout_width="@dimen/_60sdp"
+
             android:gravity="left"
             android:text="Date/Time"
             android:layout_marginLeft="@dimen/_2sdp"
@@ -76,9 +82,9 @@
             android:layout_weight="1"
             android:background="@color/colorLightGreen"
             android:gravity="center"
-
-            android:height="@dimen/_25sdp"
-            android:text="00:00"
+            android:textScaleX="0.8"
+            android:height="@dimen/_22sdp"
+            android:text="05-24-2016"
             android:textColor="@color/colorWhite" />
 
 
@@ -87,9 +93,10 @@
             android:layout_weight="1"
             android:background="@color/colorLightGreen"
             android:gravity="center"
+            android:textScaleX="0.8"
             android:layout_marginLeft="@dimen/_2sdp"
-            android:height="@dimen/_25sdp"
-            android:text=""
+            android:height="@dimen/_22sdp"
+            android:text="23:55-23:55"
             android:textColor="@color/colorWhite" />
     </TableRow>
 
@@ -98,41 +105,60 @@
     <TableRow
         android:id="@+id/staffrow"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/colorGrey"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:gravity="center_horizontal">
 
         <TextView
             android:id="@+id/staffname_lable"
-            android:layout_weight="1"
-            android:gravity="left"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="match_parent"
+            android:gravity="left|center_vertical"
+            android:layout_gravity="center_vertical|left"
             android:layout_marginLeft="@dimen/_2sdp"
             android:text="Select Staff"
             android:textColor="#000000" />
 
-        <com.kalendria.kalendria.utility.CircularNetworkImageView
-            android:id="@+id/thumbnail"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:visibility="visible" />
-
-        <TextView
-            android:id="@+id/staffName"
-            android:layout_marginRight="@dimen/_5sdp"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_weight="1"
-            android:gravity="center"
-            android:padding="10dip"
-            android:text=""
-            android:textColor="#000" />
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
 
-        <ImageButton
-            android:id="@+id/category_autocompleted_btn"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="right|center"
-            android:background="@android:color/white"
-            android:padding="@dimen/_3sdp"
-            android:src="@drawable/expand" />
+            <com.kalendria.kalendria.utility.CircularNetworkImageView
+                android:id="@+id/thumbnail"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/avatar"
+                android:layout_gravity="center_vertical|left"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/staffName"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="5dp"
+                android:layout_height="match_parent"
+                android:gravity="left|center_vertical"
+                android:layout_weight="1"
+                android:textScaleX="0.8"
+                android:layout_width="0dp"
+                android:text="Test user"
+                android:textColor="#000" />
+
+
+            <ImageButton
+                android:id="@+id/category_autocompleted_btn"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="right|center"
+                android:background="@android:color/white"
+                android:padding="@dimen/_3sdp"
+                android:src="@drawable/expand" />
+        </LinearLayout>
+
     </TableRow>
 </TableLayout>

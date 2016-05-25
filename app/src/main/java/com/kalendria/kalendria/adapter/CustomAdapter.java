@@ -1,6 +1,7 @@
 package com.kalendria.kalendria.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.security.KeyChainAliasCallback;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,6 +28,7 @@ public class CustomAdapter extends BaseAdapter  {
     LayoutInflater inflater;
     OnItemClickListener mItemClickListener;
 
+    public int totalAmount;
     public int selectedIndex;
     public CustomAdapter(Context context, ArrayList<TimeBean> mylist) {
         this.context = context;
@@ -68,17 +70,22 @@ public class CustomAdapter extends BaseAdapter  {
             mViewHolder = (MyViewHolder) view.getTag();
         }
 
-       final TimeBean currentListData = getItem(i);
+        final TimeBean currentListData = getItem(i);
 
         mViewHolder.tvTitle.setText(currentListData.getCal_time());
+        mViewHolder.tvAmount.setText(""+totalAmount+" AED");
 
         if(selectedIndex==i)
         {
             view.setBackgroundColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorSkyBlue));
+            mViewHolder.tvTitle.setTextColor(Color.WHITE);
+            mViewHolder.tvAmount.setTextColor(Color.WHITE);
         }
         else
         {
             view.setBackgroundColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorWhite));
+            mViewHolder.tvTitle.setTextColor(Color.BLACK);
+            mViewHolder.tvAmount.setTextColor(Color.BLACK);
         }
 
         final int position = i;
@@ -109,10 +116,11 @@ public class CustomAdapter extends BaseAdapter  {
 
     private class MyViewHolder {
         TextView tvTitle;
+        TextView tvAmount;
 
         public MyViewHolder(View item) {
             tvTitle = (TextView) item.findViewById(R.id.tv);
-
+            tvAmount  = (TextView) item.findViewById(R.id.tvamount);
         }
     }
 }

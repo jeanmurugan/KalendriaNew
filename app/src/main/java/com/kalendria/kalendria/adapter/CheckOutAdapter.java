@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TableRow;
@@ -27,6 +28,7 @@ import com.kalendria.kalendria.model.AddToCardServiceModel;
 import com.kalendria.kalendria.model.AddToCardVenueModel;
 import com.kalendria.kalendria.model.Venue;
 import com.kalendria.kalendria.singleton.AddToCardSingleTone;
+import com.kalendria.kalendria.utility.KalendriaAppController;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -54,7 +56,7 @@ public class CheckOutAdapter extends BaseAdapter {
         _c = context;
         this.arraylist = new ArrayList<AddToCardServiceModel>();
         this.arraylist.addAll(_data);
-            this.delegate=delegate;
+        this.delegate=delegate;
         System.out.println("i am from selected adapter page" + _data.size());
         //Toast.makeText(_c, "hi", Toast.LENGTH_LONG).show();
     }
@@ -98,6 +100,8 @@ public class CheckOutAdapter extends BaseAdapter {
         v.service_time = (TextView) view.findViewById(R.id.service_time);
         v.staffName = (TextView) view.findViewById(R.id.staffName);
         v.staffRow = (TableRow)view.findViewById(R.id.staffrow);
+        v.staffImageView = (ImageView) view.findViewById(R.id.thumbnail);
+
 
         final AddToCardServiceModel data = (AddToCardServiceModel) _data.get(i);
         v.service_nameLable.setText(data.getServiceName());
@@ -105,15 +109,17 @@ public class CheckOutAdapter extends BaseAdapter {
 
         v.service_date.setText(data.selectedDate);
         v.service_time.setText(data.selectedTime);
+        if(data.selectedTime!=null)
+            Log.d("selectedTime",data.selectedTime);
 
         v.service_price.setPaintFlags(v.service_price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-         v.service_price.setText(data.getStrikeOutAmount());
+        v.service_price.setText(data.getStrikeOutAmount());
 
         v.service_deiscount.setText(data.getOriginalPrices());
 
         v.staffName.setText(data.getstaffname());
 
-         final int pos = i;
+        final int pos = i;
         v.staffRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,23 +127,37 @@ public class CheckOutAdapter extends BaseAdapter {
                 delegate.onShowStaffPicker(pos,data);
             }
         });
-      /*  if( data.getImageUrl() != null && !"".equals(data.getImageUrl()) ){
-            try {
-                Picasso.with(_c)
-                        .load(data.getImageUrl())
-                        // .memoryPolicy(MemoryPolicy.NO_CACHE )
-                        // .networkPolicy(NetworkPolicy.NO_CACHE)
-                        //.resize(720, 350)
-                        // .error(R.drawable.login)
-                        .placeholder(R.drawable.login_logo)
-                        .noFade()
-                        // .fit().centerCrop()
-                        .into(v.imageView);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
+        if(data.getstaffname().length()>0) {
+            if (data.staffthumbImage != null && !"".equals(data.staffthumbImage)) {
+                try {
+                    Picasso.with(_c)
+                            .load(data.staffthumbImage)
+                            // .memoryPolicy(MemoryPolicy.NO_CACHE )
+                            // .networkPolicy(NetworkPolicy.NO_CACHE)
+                            //.resize(720, 350)
+                            // .error(R.drawable.login)
+                            .placeholder(R.drawable.avatar)
+                            .noFade()
+                            // .fit().centerCrop()
+                            .into(v.staffImageView);
+                } catch (Exception e) {
+                    v.staffImageView.setImageResource(R.drawable.avatar);
+                    e.printStackTrace();
+                }
+
+            } else
+                v.staffImageView.setImageResource(R.drawable.avatar);
+
+            v.staffImageView.setVisibility(View.VISIBLE);
         }
-*/
+        else
+            v.staffImageView.setVisibility(View.INVISIBLE);
+
+        if(!data.isValid || !data.isOpen)
+            v.service_time.setBackgroundColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorRoseRed));
+        else
+            v.service_time.setBackgroundColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorLightGreen));
 
 
         view.setTag(data);
@@ -165,6 +185,7 @@ public class CheckOutAdapter extends BaseAdapter {
         TextView service_nameLable, service_duration, service_price, service_deiscount, service_date, service_time, staffName;
         ImageView imageView;
         TableRow staffRow;
+        ImageView staffImageView;
 
 
     }

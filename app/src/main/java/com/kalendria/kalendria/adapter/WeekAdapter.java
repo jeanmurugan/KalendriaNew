@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kalendria.kalendria.R;
@@ -25,7 +26,7 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.WeekViewHolder
     ArrayList<String> dataname;
 
     public int todayUniqueID = 0;
-   public int selectedIndex =-1;
+    public int selectedIndex =-1;
 
     OnItemClickListener mItemClickListener;
 
@@ -40,18 +41,18 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.WeekViewHolder
         int month = calender.get(Calendar.MONTH)+1;// becoz it start from 0
         int year = calender.get(Calendar.YEAR);
 
-        todayUniqueID = day*1000000+month*10000+year;
+        todayUniqueID = year*10000+month*100+day;//month*1000000+day*10000+year;
         selectedIndex=todayUniqueID;
     }
 
     public void refreshDates(Context context, ArrayList<KADate> data, ArrayList<String> data1,int indexvalue1)
-{
-    ctx = context;
-    dataValue = data;
-    dataname = data1;
-   // indexvalue = indexvalue1;
-   // selectedIndex=indexvalue1;
-}
+    {
+        ctx = context;
+        dataValue = data;
+        dataname = data1;
+        // indexvalue = indexvalue1;
+        // selectedIndex=indexvalue1;
+    }
     @Override
     public WeekViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -72,19 +73,24 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.WeekViewHolder
 
         if(selectedIndex==dateObject.unique)
         {
-            holder.days.setBackgroundResource(R.drawable.button_circle);
+            holder.imageView.setBackgroundResource(R.drawable.button_circle);
             holder.days.setTextColor(Color.WHITE);
         }
         else if(todayUniqueID==dateObject.unique && selectedIndex!=position)
         {
-            holder.days.setBackgroundResource(R.drawable.button_circle_white);
+            holder.imageView.setBackgroundResource(R.drawable.button_circle_white);
             holder.days.setTextColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorSkyBlue));
         }
         else if(dateObject.unique<todayUniqueID)
         {
-            holder.days.setBackgroundResource(R.drawable.button_circle_grey);
-            holder.days.setTextColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorBlack));
+            holder.imageView.setBackgroundColor(Color.TRANSPARENT);
+            holder.days.setTextColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorLightTextColor2));
         }
+        else {
+            holder.days.setTextColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorSkyBlue));
+            holder.imageView.setBackgroundColor(Color.TRANSPARENT);
+        }
+
 
         /*
         if(position == indexvalue){
@@ -106,11 +112,13 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.WeekViewHolder
 
         TextView days;
         TextView daysname;
+        ImageView imageView;
 
         public WeekViewHolder(View itemView) {
             super(itemView);
             days = (TextView) itemView.findViewById(R.id.daysvalue);
             daysname = (TextView) itemView.findViewById(R.id.daysname);
+           // imageView = (ImageView) itemView.findViewById(R.id.bgImageView);
 
             itemView.setOnClickListener(this);
         }

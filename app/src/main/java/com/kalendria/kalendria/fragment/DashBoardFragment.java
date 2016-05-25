@@ -133,13 +133,6 @@ public class DashBoardFragment extends Fragment {
 
         try {
             makeJsonObjectRequest();
-            /*
-            //if(responceReseultFromServerSingletone.size()==0)
-            {
-                makeJsonObjectRequest();
-            }else{
-
-            }*/
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -11,5 +11,8 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorCheckout">#0097DB</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorRoseRed">#EE4647</color>
+    <color name="colorLightTextColor">#515151</color>
+    <color name="colorLightTextColor2">#5C5C5C</color>
 
 </resources>

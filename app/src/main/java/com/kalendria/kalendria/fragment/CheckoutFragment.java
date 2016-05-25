@@ -86,8 +86,7 @@ public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckO
     CheckOutAdapter checkOutAdapter;
     CustomAdapter customAdapter; //added by Magesh
     ListView list,listView;
-    double value,value1;
-    int y,zd,y1,zd1;
+
     ArrayList<Double> date_add;
     ArrayList<TimeBean> myList = new ArrayList<TimeBean>();
     String[] arrTime;
@@ -133,6 +132,7 @@ public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckO
         checkOutButton=(Button) view.findViewById(R.id.checkout_btn);
         txtTotalPrice =(TextView)view.findViewById(R.id.price);
 
+        per.setVisibility(View.INVISIBLE);//No prev as of now
         dictBusiness = new LinkedHashMap();
         dictWorkingHours = new LinkedHashMap();
         getWorkingHours();
@@ -156,14 +156,23 @@ public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckO
     public void  loadTimes()
     {
         arrTime = new String[] {"07:00","07:15","07:30","07:45","08:00","08:15","08:30","08:45",
-            "09:00","09:15","09:30","09:45","10:00","10:15","10:30","10:45",
-            "11:00","11:15","11:30","11:45","12:00","12:15","12:30","12:45",
-            "13:00","13:15","13:30","13:45","14:00","14:15","14:30","14:45",
-            "15:00","15:15","15:30","15:45","16:00","16:15","16:30","16:45",
-            "17:00","17:15","17:30","17:45","18:00","18:15","18:30","18:45",
-            "19:00","19:15","19:30","19:45","20:00","20:15","20:30","20:45",
-            "21:00","21:15","21:30","21:45","22:00","22:15","22:30","22:45",
-            "23:00","23:15","23:30","23:45"};
+                "09:00","09:15","09:30","09:45","10:00","10:15","10:30","10:45",
+                "11:00","11:15","11:30","11:45","12:00","12:15","12:30","12:45",
+                "13:00","13:15","13:30","13:45","14:00","14:15","14:30","14:45",
+                "15:00","15:15","15:30","15:45","16:00","16:15","16:30","16:45",
+                "17:00","17:15","17:30","17:45","18:00","18:15","18:30","18:45",
+                "19:00","19:15","19:30","19:45","20:00","20:15","20:30","20:45",
+                "21:00","21:15","21:30","21:45","22:00","22:15","22:30","22:45",
+                "23:00","23:15","23:30","23:45"};
+
+    }
+    private String addMinute1(int hr, int min, int toadd){
+        Calendar calander = Calendar.getInstance();
+        calander.set(Calendar.HOUR_OF_DAY, hr);
+        calander.set(Calendar.MINUTE, min);
+        calander.add(Calendar.MINUTE, toadd);
+        SimpleDateFormat df3 = new SimpleDateFormat("HH:mm");
+        return df3.format(calander.getTime());
 
     }
     public void resetAppointmentDate()
@@ -172,8 +181,7 @@ public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckO
         int totalAmount =0;
         int index = ArrayUtils.indexOf(arrTime,selectedTime);
 
-        int hour =0;
-        int min  =0;
+
         Calendar calander = Calendar.getInstance();
         if(selectedTime!=null && selectedTime.length()>2)
         {
@@ -182,12 +190,16 @@ public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckO
             checkAvailability(dateStr);
         }
 
-
+        String startTime=selectedTime;
         for (int i=0;i<service_dboup.size();i++)
         {
-            AddToCardServiceModel addToCardServiceModel = service_dboup.get(i);
-            addToCardServiceModel.selectedDate= selectedDay.day+"-"+selectedDay.month+"-"+selectedDay.year;
-            totalAmount+=addToCardServiceModel.remainAmount;
+
+
+
+            try {
+                AddToCardServiceModel addToCardServiceModel = service_dboup.get(i);
+                addToCardServiceModel.selectedDate = selectedDay.month + "-" + selectedDay.day + "-" + selectedDay.year;
+                totalAmount += addToCardServiceModel.remainAmount;
 
            /*
             calander.set(Calendar.HOUR_OF_DAY, hr);
@@ -196,19 +208,49 @@ public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckO
             SimpleDateFormat df3 = new SimpleDateFormat("HH:mm");
             String formattedDate3 = df3.format(calander.getTime());
 */
-            VenueDay dayObject = (VenueDay) dictWorkingHours.get(selectedDay.day);
+                VenueDay dayObject = (VenueDay) dictWorkingHours.get(selectedDay.dayLongName.toLowerCase());
 
-            if(dayObject!=null)
-            addToCardServiceModel.isOpen=dayObject.isOpen();
+                if (dayObject != null)
+                    addToCardServiceModel.isOpen = dayObject.isOpen();
 
-            if(index<arrTime.length && index>-1)
-            addToCardServiceModel.selectedTime=arrTime[index++];
-            else {
+                if (index < arrTime.length && index > -1) {
+                    String aString = startTime;
+                    String first = aString.substring(0, aString.indexOf(":"));
+                    String second = aString.substring(aString.indexOf(":") + 1, aString.length());
+                    int hour = Integer.parseInt(first);
+                    int min = Integer.parseInt(second);
+                    String duration = addToCardServiceModel.getServiceDuration();
+                    String endTime = null;
 
-                if(dayObject!=null)
-                addToCardServiceModel.selectedTime = dayObject.getStart_time()+"-"+dayObject.getEnd_time();
+                    if (duration != null && duration.indexOf(":") > 0) {
+                        first = duration.substring(0, duration.indexOf(":"));
+                        second = duration.substring(duration.indexOf(":") + 1, duration.length());
+                        int dhour = Integer.parseInt(first);
+                        int dmin = Integer.parseInt(second);
+                        addToCardServiceModel.isValid =true;
+                        endTime = addMinute1(hour, min, (dhour * 60) + dmin);
+                    }
+                    if (endTime == null) {
+                        addToCardServiceModel.isValid = false;
+                        endTime = startTime;
+                    }
+                    startTime=endTime;
+                    addToCardServiceModel.selectedTime = aString + " - " + endTime;
+
+                } else {
+                    addToCardServiceModel.isValid = false;
+                    if (dayObject != null)
+                        addToCardServiceModel.selectedTime = dayObject.getStart_time() + " - " + dayObject.getEnd_time();
+                }
+            }catch (Exception ex)
+            {
+                ex.printStackTrace();
             }
+
         }
+        if(customAdapter!=null)
+            customAdapter.totalAmount=totalAmount;
+
         txtTotalPrice.setText(""+totalAmount+" AED");
         checkOutAdapter.notifyDataSetChanged();
         validateStaff();//check and enable check button
@@ -400,14 +442,14 @@ public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckO
 
 
 
-            if(dictWorkingHours!=null && dictWorkingHours.size()>0)
-            {
+        if(dictWorkingHours!=null && dictWorkingHours.size()>0)
+        {
 
-                VenueDay dayObject = (VenueDay) dictWorkingHours.get(dayLongname.toLowerCase());
-                intTodayIndex = ArrayUtils.indexOf(arrTime, dayObject.getStart_time());
-                endIndex = ArrayUtils.indexOf(arrTime, dayObject.getEnd_time());
+            VenueDay dayObject = (VenueDay) dictWorkingHours.get(dayLongname.toLowerCase());
+            intTodayIndex = ArrayUtils.indexOf(arrTime, dayObject.getStart_time());
+            endIndex = ArrayUtils.indexOf(arrTime, dayObject.getEnd_time());
 
-            }
+        }
 
         if(intTodayIndex>intStartIndex)
             intStartIndex=intTodayIndex;
@@ -533,12 +575,13 @@ public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckO
 
                 try {
 
-                    if (count > -1 && count <= 6) {
+                    if (count > 0 && count <= 6) {
                         count--;
-
                         reloadDaysWheel(count);
 
                     }
+                    if(count==0)
+                        per.setVisibility(View.INVISIBLE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -548,6 +591,8 @@ public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckO
 
         next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+                per.setVisibility(View.VISIBLE);
                 if (count < 6) {
                     count++;
                     reloadDaysWheel(count);
@@ -567,7 +612,7 @@ public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckO
         Calendar calendar = Calendar.getInstance(Locale.US);
         calendar.setTime(refDate);
         calendar.set(Calendar.DAY_OF_WEEK, firstDayOfWeek);
-       ArrayList<KADate> daysOfWeek =  new ArrayList<>(7);
+        ArrayList<KADate> daysOfWeek =  new ArrayList<>(7);
         for (int i = 0; i < 7; i++) {
             KADate date = new KADate(calendar);
             daysOfWeek.add(date);
@@ -610,7 +655,7 @@ public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckO
 
         staffDialog.show();
         if(arrEmployes!=null)
-        tempEmpolyees.addAll(arrEmployes);
+            tempEmpolyees.addAll(arrEmployes);
 
         staffListAdapter.notifyDataSetChanged();
     }
@@ -654,6 +699,7 @@ public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckO
                 AddToCardServiceModel addToCardServiceModel = service_dboup.get(selectedItemIndex);
                 addToCardServiceModel.staffname=objStaff.firstName;
                 addToCardServiceModel.staffID= objStaff.empid;
+                addToCardServiceModel.staffthumbImage = objStaff.imgUrlThumb;
                 checkOutAdapter.notifyDataSetChanged();
                 validateStaff();
             }
@@ -694,7 +740,7 @@ public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckO
 
         if (isValid){
             checkOutButton.setBackgroundColor(KalendriaAppController.getInstance().getResources().getColor(R.color.colorCheckout));
-           checkOutButton.setEnabled(true);
+            checkOutButton.setEnabled(true);
 
         }
         else
@@ -830,7 +876,7 @@ public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckO
     ArrayList arrMissEmpIds = new ArrayList();
     private  void getAvailableEmployIds(String datestr)
     {
-       // showpDialog();
+        // showpDialog();
         String url =Constant.HOST+"api/v1/external/available";
 
         JSONObject parameter = new JSONObject();
@@ -952,7 +998,7 @@ public class CheckoutFragment extends Fragment implements CheckOutAdapter.CheckO
                         if(dictWorkingHours==null)
                             dictBusiness=new LinkedHashMap();
                         else
-                        dictBusiness.clear();
+                            dictBusiness.clear();
                         for (int i = 0; i < jsonArray.length(); i++) {
                             try {
 
